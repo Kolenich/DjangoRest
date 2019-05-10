@@ -16,8 +16,8 @@ class Employee(models.Model):
                                      related_name='employees', verbose_name='Организация')
 
     class Meta:
-        verbose_name = 'Покупатель'
-        verbose_name_plural = 'Покупатели'
+        verbose_name = 'Сотрудник'
+        verbose_name_plural = 'Сотрудники'
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
