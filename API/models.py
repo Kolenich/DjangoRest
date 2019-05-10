@@ -12,7 +12,8 @@ class Employee(models.Model):
     age = models.PositiveSmallIntegerField(verbose_name='Возраст')
     date_of_birth = models.DateField(verbose_name='Дата рождения')
     registration_date = models.DateTimeField(verbose_name='Дата регистрации', auto_now_add=True)
-    photo = models.FileField(verbose_name='Фотография', null=True, blank=True)
+    attachment = models.OneToOneField('Attachment', verbose_name='Фотография', on_delete=models.CASCADE, null=True,
+                                      blank=True)
     organization = models.ForeignKey('Organization', verbose_name='Организация', on_delete=models.CASCADE, null=True,
                                      blank=True, related_name='employees', )
 
@@ -41,3 +42,18 @@ class Organization(models.Model):
 
     def __str__(self):
         return f'{self.full_name}'
+
+
+class Attachment(models.Model):
+    file = models.FileField(verbose_name='Файл', upload_to='attachments')
+    file_name = models.CharField(verbose_name='Имя файла', max_length=500)
+    file_mime = models.CharField(verbose_name='Расширение файла', max_length=500)
+    file_size = models.IntegerField(verbose_name='Размер файла')
+    uploaded = models.DateTimeField(verbose_name="Время создания", auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Вложение'
+        verbose_name_plural = 'Вложения'
+
+    def __str__(self):
+        return self.file_name
