@@ -33,8 +33,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
                 employee.__dict__.update(**item)
                 valid_employees.append(employee)
             except KeyError:
-                employee: Employee = Employee.objects.create(**item)
-                employee.organization = instance
+                employee: Employee = Employee.objects.create(organization=instance, **item)
                 valid_employees.append(employee)
         for employee in valid_employees:
             employee.save()
