@@ -63,4 +63,10 @@ class Attachment(models.Model):
 
 @receiver(post_delete, sender=Attachment)
 def submission_delete(instance: Attachment, **kwargs):
+    """
+    Функция, которая вызывается после удаления объекта модели Attachment
+    :param instance: объект модели Attachment
+    :param kwargs: дополнительные параметры
+    :return: удаляет файл с сервера
+    """
     instance.file.delete(False)
