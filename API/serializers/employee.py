@@ -13,7 +13,7 @@ class EmployeeSerializer(serializers.ModelSerializer):
     Сериалайзер для модели Employee
     """
     id = serializers.IntegerField(required=False)
-    attachment = AttachmentSerializer(many=False)
+    attachment = AttachmentSerializer(many=False, required=False, allow_null=True)
     age = serializers.IntegerField(read_only=True)
 
     class Meta:
