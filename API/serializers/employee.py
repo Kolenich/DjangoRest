@@ -28,3 +28,10 @@ class EmployeeSerializer(serializers.ModelSerializer):
         instance: Employee = Employee.objects.create(age=age, attachment=attachment, **validated_data)
 
         return instance
+
+    def update(self, instance: Employee, validated_data):
+        age = int(relativedelta(now, validated_data['date_of_birth']).years)
+        instance.__dict__.update(age=age, **validated_data)
+        instance.save()
+
+        return instance
