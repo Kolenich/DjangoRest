@@ -25,6 +25,7 @@ class Employee(models.Model):
     class Meta:
         verbose_name = 'Сотрудник'
         verbose_name_plural = 'Сотрудники'
+        ordering = ('id',)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
@@ -44,6 +45,7 @@ class Organization(models.Model):
         verbose_name = 'Организация'
         verbose_name_plural = 'Организации'
         unique_together = ('inn', 'kpp')
+        ordering = ('id',)
 
     def __str__(self):
         return f'{self.full_name}'
@@ -59,6 +61,7 @@ class Attachment(models.Model):
     class Meta:
         verbose_name = 'Вложение'
         verbose_name_plural = 'Вложения'
+        ordering = ('id',)
 
     def __str__(self):
         return self.file_name

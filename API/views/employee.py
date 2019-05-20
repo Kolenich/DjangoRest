@@ -7,5 +7,5 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     """
     ViewSet для модели Customer
     """
-    queryset = Employee.objects.all().order_by('id')
+    queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer

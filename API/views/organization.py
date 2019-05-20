@@ -7,5 +7,5 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     """
     ViewSet для модели Organization
     """
-    queryset = Organization.objects.all().order_by('id')
+    queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer

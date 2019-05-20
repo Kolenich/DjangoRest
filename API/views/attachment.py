@@ -7,5 +7,5 @@ class AttachmentViewSet(viewsets.ModelViewSet):
     """
     ViewSet для модели Customer
     """
-    queryset = Attachment.objects.all().order_by('id')
+    queryset = Attachment.objects.all()
     serializer_class = AttachmentSerializer
