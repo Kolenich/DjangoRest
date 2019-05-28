@@ -2,8 +2,8 @@ FROM postgres:11.3-alpine
 
 LABEL maintainer="nick.zhigalin@gmail.com"
 
-ENV POSTGRES_DB postgres
-ENV POSTGRES_USER nikolay
-ENV POSTGRES_PASSWORD Crowel_16
+ENV POSTGRES_DB=postgres \
+    POSTGRES_USER=nikolay \
+    POSTGRES_PASSWORD=Crowel_16
 
 EXPOSE 5432

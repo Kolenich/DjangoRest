@@ -4,13 +4,15 @@ LABEL maintainer="nick.zhigalin@gmail.com"
 
 ENV PROJECT_MODE production
 
-COPY . /app
-
 WORKDIR /app
+
+EXPOSE 8000
+
+COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
 
+COPY . /app
+
 ENTRYPOINT python manage.py migrate\
         && gunicorn backend.wsgi -b 0.0.0.0:8000
-
-EXPOSE 8000
