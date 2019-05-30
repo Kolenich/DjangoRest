@@ -20,7 +20,7 @@ class Employee(models.Model):
     attachment = models.ForeignKey('Attachment', verbose_name='Фотография', on_delete=models.CASCADE, null=True,
                                    blank=True)
     organization = models.ForeignKey('Organization', verbose_name='Организация', on_delete=models.CASCADE, null=True,
-                                     blank=True, related_name='employees', )
+                                     blank=True, related_name='employees')
 
     class Meta:
         verbose_name = 'Сотрудник'
