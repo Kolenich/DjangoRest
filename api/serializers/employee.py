@@ -1,6 +1,6 @@
 from rest_framework import serializers
-from API.models import Employee, Attachment
-from API.serializers.attachment import AttachmentSerializer
+from api.models import Employee, Attachment
+from api.serializers.attachment import AttachmentSerializer
 
 from dateutil.relativedelta import relativedelta
 from datetime import datetime

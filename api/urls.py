@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from API.views import EmployeeViewSet, OrganizationViewSet, AttachmentViewSet
+from api.views import EmployeeViewSet, OrganizationViewSet, AttachmentViewSet
 
 ROUTER = DefaultRouter()
 

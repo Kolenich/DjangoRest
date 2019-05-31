@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from API.models import Attachment
-from API.serializers import AttachmentSerializer
+from api.models import Attachment
+from api.serializers import AttachmentSerializer
 
 
 class AttachmentViewSet(viewsets.ModelViewSet):

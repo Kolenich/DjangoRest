@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from API.models import Organization
-from API.serializers import OrganizationSerializer
+from api.models import Organization
+from api.serializers import OrganizationSerializer
 
 
 class OrganizationViewSet(viewsets.ModelViewSet):
