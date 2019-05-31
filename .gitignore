@@ -103,17 +103,5 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-.idea/backend.iml
-.idea/codeStyles/
-.idea/compiler.xml
-.idea/dataSources.local.xml
-.idea/dataSources.xml
-.idea/dataSources/
-.idea/dictionaries/
-.idea/misc.xml
-.idea/modules.xml
-.idea/workspace.xml
-.idea/vcs.xml
-templates/
-.idea/Server.iml
+.idea/*
 attachments/
