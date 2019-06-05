@@ -115,6 +115,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 # Настроки CORS
 CORS_ALLOW_HEADERS = default_headers
 CORS_ALLOW_METHODS = default_methods
