@@ -3,12 +3,15 @@ from api.models import Organization
 from api.serializers import EmployeeSerializer
 
 
-class OrganizationSerializer(serializers.ModelSerializer):
-    """
-    Сериалайзер для модели Organization
-    """
-    employees = EmployeeSerializer(many=True, required=False)
+class BaseOrganisationSerializer(serializers.ModelSerializer):
+    """Базовый сериалайзер для модели Organization."""
 
     class Meta:
         model = Organization
         fields = '__all__'
+
+
+class OrganizationSerializer(BaseOrganisationSerializer):
+    """Сериалайзер для модели Organization."""
+
+    employees = EmployeeSerializer(many=True, required=False)

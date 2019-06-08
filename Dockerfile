@@ -16,4 +16,6 @@ COPY . /app
 
 ENTRYPOINT python manage.py migrate \
         && python manage.py collectstatic --noinput \
-        && gunicorn backend.wsgi -b 0.0.0.0:8000
+        && mkdir pids \
+        && mkdir logs \
+        && gunicorn backend.wsgi -b 0.0.0.0:8000 -p pids/gunicorn.pid --access-logfile logs/gunicorn-access.log --log-file logs/gunicorn.log
