@@ -2,11 +2,8 @@ from rest_framework import serializers
 from api.models import Attachment
 
 
-class AttachmentSerializer(serializers.ModelSerializer):
-    """
-    Сериалайзер для модели Attachment
-    """
-    id = serializers.IntegerField(required=False)
+class BaseAttachmentSerializer(serializers.ModelSerializer):
+    """Базовый сериалайзер для модели Attachment."""
 
     class Meta:
         model = Attachment

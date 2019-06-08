@@ -1,3 +1,3 @@
-from .employee import EmployeeSerializer
-from .organization import OrganizationSerializer
-from .attachment import AttachmentSerializer
+from .employee import BaseEmployeeSerializer, EmployeeSerializer
+from .organization import BaseOrganisationSerializer, OrganizationSerializer
+from .attachment import BaseAttachmentSerializer
