@@ -1,11 +1,13 @@
+"""Модели приложения api."""
+
 from django.db import models
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 
-# Create your models here.
-
 class Employee(models.Model):
+    """Модель Сотрудника."""
+
     SEX = [('male', 'Мужской'), ('female', 'Женский')]
 
     first_name = models.CharField(verbose_name='Имя', max_length=64)
@@ -32,6 +34,8 @@ class Employee(models.Model):
 
 
 class Organization(models.Model):
+    """Модель Организации."""
+
     full_name = models.CharField(verbose_name='Полное название организации', max_length=128)
     short_name = models.CharField(verbose_name='Сокращенное название организации', max_length=128)
     registration_date = models.DateField(verbose_name='Дата регистрации', auto_now_add=True)
@@ -52,6 +56,8 @@ class Organization(models.Model):
 
 
 class Attachment(models.Model):
+    """Модель Вложения к Сотруднику (его аватар)."""
+
     file = models.ImageField(verbose_name='Файл', upload_to='attachments')
     file_name = models.CharField(verbose_name='Имя файла', max_length=500)
     file_mime = models.CharField(verbose_name='Расширение файла', max_length=500)

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'corsheaders',
     'api',
+    'auth_api',
 ]
 
 MIDDLEWARE = [
@@ -98,6 +99,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
+
+AUTH_USER_MODEL = 'auth_api.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
