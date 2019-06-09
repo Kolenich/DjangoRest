@@ -22,7 +22,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
     attachment = BaseAttachmentSerializer(many=False, required=False, allow_null=True)
     age = serializers.IntegerField(read_only=True)
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Employee:
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
         attachment: dict = validated_data.pop('attachment', None)
         if attachment is not None:
@@ -31,7 +31,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
 
         return instance
 
-    def update(self, instance: Employee, validated_data):
+    def update(self, instance: Employee, validated_data) -> Employee:
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
         instance.__dict__.update(age=age, **validated_data)
         instance.save()
