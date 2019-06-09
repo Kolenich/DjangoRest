@@ -5,7 +5,7 @@ from api.serializers import BaseAttachmentSerializer
 
 class AttachmentViewSet(viewsets.ModelViewSet):
     """
-    ViewSet для модели Customer
+    ViewSet для модели Attachment
     """
     queryset = Attachment.objects.all()
     serializer_class = BaseAttachmentSerializer
