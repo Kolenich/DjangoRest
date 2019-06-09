@@ -13,7 +13,12 @@ class BaseUserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data) -> User:
-        """Переопределение метда создания пользователя."""
+        """
+        Переопределение метда создания пользователя.
+
+        :param validated_data: провалидированные данные
+        :return: созданный объект
+        """
 
         password: str = validated_data.pop('password', None)
         if password is None:
