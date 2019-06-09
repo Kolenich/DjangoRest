@@ -124,7 +124,7 @@ CORS_ALLOW_HEADERS = default_headers
 CORS_ALLOW_METHODS = default_methods
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
-    'localhost:3000'
+    'localhost'
 )
 
 if os.getenv('PROJECT_MODE') != 'production':
