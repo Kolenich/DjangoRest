@@ -19,7 +19,7 @@ class BaseEmployeeSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(BaseEmployeeSerializer):
     """Сериалайзер для модели Employee."""
 
-    attachment = BaseAttachmentSerializer(many=False, required=False, allow_null=True)
+    attachment = BaseAttachmentSerializer(many=False, allow_null=True)
     age = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data) -> Employee:
