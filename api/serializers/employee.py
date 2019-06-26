@@ -37,3 +37,26 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         instance.save()
 
         return instance
+
+
+class EmployeeTableSerializer(BaseEmployeeSerializer):
+    """Сериалайзер модели Employee для отображения в таблице."""
+
+    employee_fio = serializers.SerializerMethodField()
+    sex = serializers.SerializerMethodField()
+
+    class Meta:
+        model = BaseEmployeeSerializer.Meta.model
+        fields = ('id', 'employee_fio', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex')
+
+    @staticmethod
+    def get_employee_fio(instance: Employee):
+        if instance.middle_name is not None:
+            return f'{instance.last_name} {instance.first_name} {instance.middle_name}'
+        return f'{instance.last_name} {instance.first_name}'
+
+    @staticmethod
+    def get_sex(instance: Employee):
+        if instance.sex == 'male':
+            return 'Муж.'
+        return 'Жен.'

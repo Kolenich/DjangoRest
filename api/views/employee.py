@@ -1,14 +1,26 @@
 from rest_framework import viewsets
-from rest_framework import permissions
 
 from api.models import Employee
-from api.serializers import EmployeeSerializer
+from api.serializers import EmployeeSerializer, EmployeeTableSerializer
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):
-    """
-    ViewSet для модели Employee
-    """
+    """ViewSet для модели Employee."""
+
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
-    permission_classes = (permissions.AllowAny,)
+
+
+class EmployeeTableViewSet(EmployeeViewSet):
+    """ViewSet модели Employee для отображения в таблице."""
+
+    serializer_class = EmployeeTableSerializer
+    filterset_fields = {
+        'id': ('contains',),
+        'phone': ('contains',),
+        'email': ('contains',),
+        'age': ('contains',),
+        'sex': ('contains',),
+        'registration_date': ('gte', 'lte'),
+        'date_of_birth': ('gte', 'lte'),
+    }
