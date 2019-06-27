@@ -11,6 +11,7 @@ class Employee(models.Model):
     first_name = models.CharField(verbose_name='Имя', max_length=64)
     last_name = models.CharField(verbose_name='Фамилия', max_length=64)
     middle_name = models.CharField(verbose_name='Отчество', max_length=64, null=True, blank=True)
+    full_name = models.CharField(verbose_name='ФИО', max_length=128)
     phone = models.CharField(verbose_name='Телефон', max_length=32, null=True, blank=True)
     email = models.EmailField(verbose_name='Электронная почта', unique=True)
     age = models.PositiveSmallIntegerField(verbose_name='Возраст')

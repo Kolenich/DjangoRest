@@ -1,8 +1,9 @@
-from rest_framework import serializers
-from api.models import Employee
+from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
-from datetime import datetime
+from rest_framework import serializers
+
+from api.models import Employee
 
 now = datetime.now()
 
@@ -18,17 +19,24 @@ class BaseEmployeeSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(BaseEmployeeSerializer):
     """Сериалайзер для модели Employee."""
 
-    age = serializers.IntegerField(read_only=True)
+    age = serializers.IntegerField(read_only=True, required=False)
+    full_name = serializers.CharField(read_only=True, required=False)
 
     def create(self, validated_data) -> Employee:
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
-        instance: Employee = Employee.objects.create(age=age, **validated_data)
+        full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
+        if validated_data['middle_name'] is not None:
+            full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
+        instance: Employee = Employee.objects.create(age=age, full_name=full_name, **validated_data)
 
         return instance
 
     def update(self, instance: Employee, validated_data) -> Employee:
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
-        instance.__dict__.update(age=age, **validated_data)
+        full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
+        if validated_data['middle_name'] is not None:
+            full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
+        instance.__dict__.update(age=age, full_name=full_name, **validated_data)
         instance.save()
 
         return instance
@@ -37,18 +45,11 @@ class EmployeeSerializer(BaseEmployeeSerializer):
 class EmployeeTableSerializer(BaseEmployeeSerializer):
     """Сериалайзер модели Employee для отображения в таблице."""
 
-    employee_fio = serializers.SerializerMethodField()
     sex = serializers.SerializerMethodField()
 
     class Meta:
         model = BaseEmployeeSerializer.Meta.model
-        fields = ('id', 'employee_fio', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex')
-
-    @staticmethod
-    def get_employee_fio(instance: Employee):
-        if instance.middle_name is not None:
-            return f'{instance.last_name} {instance.first_name} {instance.middle_name}'
-        return f'{instance.last_name} {instance.first_name}'
+        fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex')
 
     @staticmethod
     def get_sex(instance: Employee):
