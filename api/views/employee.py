@@ -20,7 +20,7 @@ class EmployeeTableViewSet(EmployeeViewSet):
         'phone': ('contains',),
         'email': ('contains',),
         'age': ('contains',),
-        'sex': ('contains',),
+        'sex': ('startswith',),
         'registration_date': ('gte', 'lte'),
         'date_of_birth': ('gte', 'lte'),
     }
