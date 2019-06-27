@@ -1,6 +1,5 @@
 from rest_framework import serializers
-from api.models import Employee, Attachment
-from api.serializers.attachment import BaseAttachmentSerializer
+from api.models import Employee
 
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
@@ -19,15 +18,11 @@ class BaseEmployeeSerializer(serializers.ModelSerializer):
 class EmployeeSerializer(BaseEmployeeSerializer):
     """Сериалайзер для модели Employee."""
 
-    attachment = BaseAttachmentSerializer(many=False, allow_null=True)
     age = serializers.IntegerField(read_only=True)
 
     def create(self, validated_data) -> Employee:
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
-        attachment: dict = validated_data.pop('attachment', None)
-        if attachment is not None:
-            attachment: Attachment = Attachment.objects.create(**attachment)
-        instance: Employee = Employee.objects.create(age=age, attachment=attachment, **validated_data)
+        instance: Employee = Employee.objects.create(age=age, **validated_data)
 
         return instance
 
