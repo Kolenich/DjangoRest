@@ -25,3 +25,4 @@ class EmployeeTableViewSet(EmployeeViewSet):
         'registration_date': ('gte', 'lte'),
         'date_of_birth': ('gte', 'lte'),
     }
+    ordering_fields = ('id', 'phone', 'email', 'age', 'full_name', 'sex', 'registration_date', 'date_of_birth')
