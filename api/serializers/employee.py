@@ -36,7 +36,13 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
         if validated_data['middle_name'] is not None:
             full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
-        instance.__dict__.update(age=age, full_name=full_name, **validated_data)
+
+        validated_data['full_name'] = full_name
+        validated_data['age'] = age
+
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+
         instance.save()
 
         return instance
