@@ -73,11 +73,11 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
     """Сериалайзер модели Employee для отображения в таблице."""
 
     sex = serializers.SerializerMethodField()
-    avatar_url = serializers.SerializerMethodField()
+    avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = BaseEmployeeSerializer.Meta.model
-        fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex', 'avatar_url')
+        fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex', 'avatar')
 
     @staticmethod
     def get_sex(instance: Employee):
@@ -86,7 +86,7 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
         return 'Жен.'
 
     @staticmethod
-    def get_avatar_url(instance: Employee):
+    def get_avatar(instance: Employee):
         if instance.avatar is not None:
             return instance.avatar.file.url
         return None
