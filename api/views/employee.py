@@ -1,6 +1,8 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.request import Request
+from rest_framework.response import Response
 
-from api.models import Employee
+from api.models import Employee, Avatar
 from api.serializers import EmployeeSerializer, EmployeeTableSerializer
 
 
@@ -9,6 +11,19 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
     queryset = Employee.objects.all()
     serializer_class = EmployeeSerializer
+
+    def destroy(self, request: Request, pk=None, *args, **kwargs) -> Response:
+        try:
+            employee: Employee = Employee.objects.get(pk=pk)
+            try:
+                avatar: Avatar = Avatar.objects.get(pk=employee.avatar_id)
+                avatar.delete()
+            except Avatar.DoesNotExist:
+                pass
+            employee.delete()
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+        except Employee.DoesNotExist:
+            return Response({}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 class EmployeeTableViewSet(EmployeeViewSet):
