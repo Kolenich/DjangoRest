@@ -40,21 +40,22 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         return instance
 
     def update(self, instance: Employee, validated_data) -> Employee:
-        age = int(relativedelta(now, validated_data['date_of_birth']).years)
+        age: int = int(relativedelta(now, validated_data['date_of_birth']).years)
 
         full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
         if validated_data['middle_name'] is not None:
             full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
 
-        avatar = validated_data.pop('avatar', None)
+        # Удаляем старый аватар, если имеется
+        current_avatar: Avatar = instance.avatar
+        if current_avatar is not None:
+            current_avatar.delete()
+
+        avatar: dict = validated_data.pop('avatar', None)
+
+        # Создаём новый аватар
         if avatar is not None:
-            avatar = Avatar.objects.create(**avatar)
-        else:
-            try:
-                current_avatar: Avatar = Avatar.objects.get(pk=instance.avatar.id)
-                current_avatar.delete()
-            except Avatar.DoesNotExist:
-                pass
+            avatar: Avatar = Avatar.objects.create(**avatar)
 
         validated_data['full_name'] = full_name
         validated_data['age'] = age
@@ -72,13 +73,20 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
     """Сериалайзер модели Employee для отображения в таблице."""
 
     sex = serializers.SerializerMethodField()
+    avatar_url = serializers.SerializerMethodField()
 
     class Meta:
         model = BaseEmployeeSerializer.Meta.model
-        fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex')
+        fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex', 'avatar_url')
 
     @staticmethod
     def get_sex(instance: Employee):
         if instance.sex == 'male':
             return 'Муж.'
         return 'Жен.'
+
+    @staticmethod
+    def get_avatar_url(instance: Employee):
+        if instance.avatar is not None:
+            return instance.avatar.file.url
+        return None
