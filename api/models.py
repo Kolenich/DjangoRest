@@ -50,4 +50,12 @@ class Avatar(models.Model):
 
 @receiver(post_delete, sender=Avatar)
 def submission_delete(sender, instance: Avatar, **kwargs):
+    """
+    Функция-сигнал для удаления файлов из файловой системы.
+
+    :param sender:
+    :param instance:
+    :param kwargs:
+    :return:
+    """
     instance.file.delete(False)

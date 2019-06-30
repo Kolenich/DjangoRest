@@ -1,4 +1,7 @@
+"""Файл для регистрации моделей в админке."""
+
 from django.contrib import admin
+
 from auth_api.models import User
 
 # Register your models here.

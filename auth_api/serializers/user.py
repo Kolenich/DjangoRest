@@ -1,6 +1,7 @@
-from rest_framework import serializers
+"""Сериалайзеры для модели User."""
 
 from django.contrib.auth.hashers import make_password
+from rest_framework import serializers
 
 from auth_api.models import User
 
@@ -19,7 +20,6 @@ class BaseUserSerializer(serializers.ModelSerializer):
         :param validated_data: провалидированные данные
         :return: созданный объект
         """
-
         password: str = validated_data.pop('password', None)
         if password is None:
             raise serializers.ValidationError('Необходимо указать пароль')

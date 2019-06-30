@@ -1,3 +1,5 @@
+"""ViewSet'ы для модели Employee."""
+
 from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -13,6 +15,15 @@ class EmployeeViewSet(viewsets.ModelViewSet):
     serializer_class = EmployeeSerializer
 
     def destroy(self, request: Request, pk=None, *args, **kwargs) -> Response:
+        """
+        Переопределение базового метода destroy.
+
+        :param request: объект запроса
+        :param pk: первичный ключ удаляемогообъекта
+        :param args: дополнительные аргументы массива
+        :param kwargs: дополнительные аргументы словаря
+        :return: ответ со статусом 204 об успешном удалении или 500
+        """
         try:
             employee: Employee = Employee.objects.get(pk=pk)
             try:
@@ -31,7 +42,6 @@ class EmployeeTableViewSet(EmployeeViewSet):
 
     serializer_class = EmployeeTableSerializer
     filterset_fields = {
-        'id': ('contains',),
         'phone': ('contains',),
         'email': ('contains',),
         'age': ('contains',),
@@ -40,4 +50,4 @@ class EmployeeTableViewSet(EmployeeViewSet):
         'registration_date': ('gte', 'lte'),
         'date_of_birth': ('gte', 'lte'),
     }
-    ordering_fields = ('id', 'phone', 'email', 'age', 'full_name', 'sex', 'registration_date', 'date_of_birth')
+    ordering_fields = ('phone', 'email', 'age', 'full_name', 'sex', 'registration_date', 'date_of_birth')

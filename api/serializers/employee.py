@@ -1,3 +1,5 @@
+"""Сериалайзеры для модели Employee."""
+
 from datetime import datetime
 
 from dateutil.relativedelta import relativedelta
@@ -25,6 +27,12 @@ class EmployeeSerializer(BaseEmployeeSerializer):
     avatar = BaseAvatarSerializer(many=False, allow_null=True)
 
     def create(self, validated_data) -> Employee:
+        """
+        Переопределение метода бозового метода create.
+
+        :param validated_data: провалидированные данные
+        :return: созданный объект модели
+        """
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
 
         full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
@@ -40,6 +48,13 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         return instance
 
     def update(self, instance: Employee, validated_data) -> Employee:
+        """
+        Переопределение базового метода update.
+
+        :param instance: моедль, которую нужно обновить
+        :param validated_data: провалидированные данные
+        :return: объект обновленной модели
+        """
         age: int = int(relativedelta(now, validated_data['date_of_birth']).years)
 
         full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
@@ -81,12 +96,24 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
 
     @staticmethod
     def get_sex(instance: Employee):
+        """
+        Функция получения значения в поле sex.
+
+        :param instance: объект модели Employee
+        :return: Муж. или Жен.
+        """
         if instance.sex == 'male':
             return 'Муж.'
         return 'Жен.'
 
     @staticmethod
     def get_avatar(instance: Employee):
+        """
+        Функция получения значения в поле avatar.
+
+        :param instance: объект модели Employee
+        :return: относительный путь до файла или None
+        """
         if instance.avatar is not None:
             return instance.avatar.file.url
         return None
