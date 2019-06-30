@@ -1,9 +1,0 @@
-FROM postgres:11.3-alpine
-
-LABEL maintainer="nick.zhigalin@gmail.com"
-
-ENV POSTGRES_DB=postgres \
-    POSTGRES_USER=nikolay \
-    POSTGRES_PASSWORD=Crowel_16
-
-EXPOSE 5432
