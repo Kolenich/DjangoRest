@@ -107,4 +107,5 @@ Dockerfile*
 *.sh
 static/
 .*
+media
 
