@@ -42,11 +42,11 @@ class EmployeeTableViewSet(EmployeeViewSet):
 
     serializer_class = EmployeeTableSerializer
     filterset_fields = {
-        'phone': ('contains',),
-        'email': ('contains',),
-        'age': ('contains',),
-        'full_name': ('contains',),
-        'sex': ('startswith',),
+        'phone': ('contains', 'startswith', 'endswith', 'exact',),
+        'email': ('contains', 'startswith', 'endswith', 'exact'),
+        'age': ('contains', 'startswith', 'endswith', 'exact'),
+        'full_name': ('contains', 'startswith', 'endswith', 'exact'),
+        'sex': ('exact',),
         'registration_date': ('gte', 'lte'),
         'date_of_birth': ('gte', 'lte'),
     }
