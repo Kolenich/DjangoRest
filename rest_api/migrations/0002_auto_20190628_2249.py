@@ -6,7 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('api', '0001_initial'),
+        ('rest_api', '0001_initial'),
     ]
 
     operations = [
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='employee',
             name='avatar',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='api.Avatar',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='rest_api.Avatar',
                                     verbose_name='Аватар'),
         ),
     ]

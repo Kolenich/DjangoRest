@@ -4,8 +4,8 @@ from rest_framework import viewsets, status
 from rest_framework.request import Request
 from rest_framework.response import Response
 
-from api.models import Employee, Avatar
-from api.serializers import EmployeeSerializer, EmployeeTableSerializer
+from rest_api.models import Employee, Avatar
+from rest_api.serializers import EmployeeSerializer, EmployeeTableSerializer
 
 
 class EmployeeViewSet(viewsets.ModelViewSet):

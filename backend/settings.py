@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'corsheaders',
     'django_filters',
-    'api',
+    'rest_api',
     'auth_api',
 ]
 

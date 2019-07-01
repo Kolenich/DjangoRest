@@ -5,8 +5,8 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
-from api.models import Employee, Avatar
-from api.serializers import BaseAvatarSerializer
+from rest_api.models import Employee, Avatar
+from rest_api.serializers import BaseAvatarSerializer
 
 now = datetime.now()
 
