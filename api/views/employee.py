@@ -44,7 +44,7 @@ class EmployeeTableViewSet(EmployeeViewSet):
     filterset_fields = {
         'phone': ('contains', 'startswith', 'endswith', 'exact',),
         'email': ('contains', 'startswith', 'endswith', 'exact'),
-        'age': ('contains', 'startswith', 'endswith', 'exact'),
+        'age': ('gte', 'gt', 'lte', 'lt', 'exact'),
         'full_name': ('contains', 'startswith', 'endswith', 'exact'),
         'sex': ('exact',),
         'registration_date': ('gte', 'lte'),
