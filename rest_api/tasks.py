@@ -12,4 +12,5 @@ def sum_test(x, y):
     :param y: число
     :return: сумма x и y
     """
+    print(x + y)
     return x + y
