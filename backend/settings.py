@@ -146,6 +146,11 @@ REST_FRAMEWORK = {
     )
 }
 
+# Настройка Celery
+CELERY_BROKER_URL = 'amqp://kolenich:Crowel_16@rabbitmq:5672/kolenich-host'
+CELERY_TIMEZONE = 'Europe/Moscow'
+
+# Настройки для dev-режима
 if os.getenv('PROJECT_MODE') != 'production':
     DEBUG = True
     ALLOWED_HOSTS = ['*']
@@ -156,3 +161,4 @@ if os.getenv('PROJECT_MODE') != 'production':
         }
     }
     CORS_ORIGIN_ALLOW_ALL = True
+    CELERY_BROKER_URL = 'sqla+sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
