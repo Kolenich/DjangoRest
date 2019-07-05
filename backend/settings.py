@@ -26,7 +26,7 @@ SECRET_KEY = 'm&1nf4=*jej2g77i(j)oi#$=of4llu*gl62$6)+=on%9kqw_i_'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['0.0.0.0']
+ALLOWED_HOSTS = ['0.0.0.0', '']
 
 # Application definition
 
@@ -130,6 +130,9 @@ CORS_ALLOW_HEADERS = default_headers
 CORS_ALLOW_METHODS = default_methods
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
+    'http://vps706754.ovh.net'
+)
+CORS_TRUSTED_ORIGINS = (
     'http://vps706754.ovh.net'
 )
 
