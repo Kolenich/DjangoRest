@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'm&1nf4=*jej2g77i(j)oi#$=of4llu*gl62$6)+=on%9kqw_i_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['vps706754.ovh.net']
 
@@ -126,17 +126,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Настроки CORS
-CORS_ALLOW_HEADERS = default_headers + (
-    'Access-Control-Allow-Origin',
-)
+CORS_ALLOW_HEADERS = default_headers
 CORS_ALLOW_METHODS = default_methods
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
     'http://vps706754.ovh.net'
 )
-# CORS_TRUSTED_ORIGINS = (
-#     'http://vps706754.ovh.net'
-# )
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
