@@ -1,9 +1,9 @@
 """Файл с задачами для Celery."""
 
-from celery import shared_task
+from backend.celery import app
 
 
-@shared_task
+@app.task()
 def sum_test(x, y):
     """
     Тестовая задача для Celery.
