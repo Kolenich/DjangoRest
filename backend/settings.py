@@ -148,7 +148,14 @@ REST_FRAMEWORK = {
 
 # Настройка Celery
 CELERY_BROKER_URL = 'amqp://kolenich:Crowel_16@rabbitmq:5672/kolenich-host'
-CELERY_TIMEZONE = 'Europe/Moscow'
+CELERY_TIMEZONE = TIME_ZONE
+
+# Настройка почты для рассылки
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'nick.zhigalin@gmail.com'
+EMAIL_HOST_PASSWORD = 'crowel_16'
+EMAIL_USE_SSL = True
 
 # Настройки для dev-режима
 if os.getenv('PROJECT_MODE') != 'production':
