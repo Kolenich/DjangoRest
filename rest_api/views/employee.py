@@ -25,9 +25,9 @@ class EmployeeViewSet(viewsets.ModelViewSet):
         :return: ответ со статусом 204 об успешном удалении или 500
         """
         try:
-            employee: Employee = Employee.objects.get(pk=pk)
+            employee = Employee.objects.get(pk=pk)
             try:
-                avatar: Avatar = Avatar.objects.get(pk=employee.avatar_id)
+                avatar = Avatar.objects.get(pk=employee.avatar_id)
                 avatar.delete()
             except Avatar.DoesNotExist:
                 pass

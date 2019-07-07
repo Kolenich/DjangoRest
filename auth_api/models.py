@@ -2,11 +2,11 @@
 
 import uuid
 
-from django.db import models
-from django.utils import timezone
-from django.contrib.auth.signals import user_logged_in
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.signals import user_logged_in
+from django.db import models
+from django.utils import timezone
 
 from .managers import UserManager
 

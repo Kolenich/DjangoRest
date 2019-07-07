@@ -1,0 +1,7 @@
+FROM rabbitmq:3.7.15-alpine
+
+LABEL maintainer="nick.zhigalin@gmail.com"
+
+ENV RABBITMQ_DEFAULT_USER=kolenich \
+    RABBITMQ_DEFAULT_PASS=Crowel_16 \
+    RABBITMQ_DEFAULT_VHOST=kolenich-host

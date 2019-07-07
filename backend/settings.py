@@ -154,7 +154,7 @@ CELERY_TIMEZONE = TIME_ZONE
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'nick.zhigalin@gmail.com'
-EMAIL_HOST_PASSWORD = 'crowel_16'
+EMAIL_HOST_PASSWORD = 'qpmpjnobbrdkfxrp'
 EMAIL_USE_SSL = True
 
 # Настройки для dev-режима

@@ -26,7 +26,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
     full_name = serializers.CharField(read_only=True, required=False)
     avatar = BaseAvatarSerializer(many=False, allow_null=True)
 
-    def create(self, validated_data) -> Employee:
+    def create(self, validated_data: dict) -> Employee:
         """
         Переопределение метода бозового метода create.
 
@@ -43,11 +43,11 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         if avatar is not None:
             avatar = Avatar.objects.create(**avatar)
 
-        instance: Employee = Employee.objects.create(age=age, full_name=full_name, avatar=avatar, **validated_data)
+        instance = Employee.objects.create(age=age, full_name=full_name, avatar=avatar, **validated_data)
 
         return instance
 
-    def update(self, instance: Employee, validated_data) -> Employee:
+    def update(self, instance: Employee, validated_data: dict) -> Employee:
         """
         Переопределение базового метода update.
 
@@ -55,22 +55,22 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         :param validated_data: провалидированные данные
         :return: объект обновленной модели
         """
-        age: int = int(relativedelta(now, validated_data['date_of_birth']).years)
+        age = int(relativedelta(now, validated_data['date_of_birth']).years)
 
         full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
         if validated_data['middle_name'] is not None:
             full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
 
         # Удаляем старый аватар, если имеется
-        current_avatar: Avatar = instance.avatar
+        current_avatar = instance.avatar
         if current_avatar is not None:
             current_avatar.delete()
 
-        avatar: dict = validated_data.pop('avatar', None)
+        avatar = validated_data.pop('avatar', None)
 
         # Создаём новый аватар
         if avatar is not None:
-            avatar: Avatar = Avatar.objects.create(**avatar)
+            avatar = Avatar.objects.create(**avatar)
 
         validated_data['full_name'] = full_name
         validated_data['age'] = age
@@ -95,7 +95,7 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
         fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex', 'avatar')
 
     @staticmethod
-    def get_sex(instance: Employee):
+    def get_sex(instance: Employee) -> str:
         """
         Функция получения значения в поле sex.
 
@@ -107,7 +107,7 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
         return 'Жен.'
 
     @staticmethod
-    def get_avatar(instance: Employee):
+    def get_avatar(instance: Employee) -> str:
         """
         Функция получения значения в поле avatar.
 

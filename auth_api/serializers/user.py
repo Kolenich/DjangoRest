@@ -13,19 +13,19 @@ class BaseUserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
-    def create(self, validated_data) -> User:
+    def create(self, validated_data: dict) -> User:
         """
         Переопределение метда создания пользователя.
 
         :param validated_data: провалидированные данные
         :return: созданный объект
         """
-        password: str = validated_data.pop('password', None)
+        password = validated_data.pop('password', None)
         if password is None:
             raise serializers.ValidationError('Необходимо указать пароль')
 
-        password_hash: str = make_password(password)
+        password_hash = make_password(password)
 
-        instance: User = User.objects.create(password=password_hash, **validated_data)
+        instance = User.objects.create(password=password_hash, **validated_data)
 
         return instance
