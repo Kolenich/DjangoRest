@@ -107,7 +107,7 @@ class EmployeeTableSerializer(BaseEmployeeSerializer):
         return 'Жен.'
 
     @staticmethod
-    def get_avatar(instance: Employee) -> str:
+    def get_avatar(instance: Employee) -> str or None:
         """
         Функция получения значения в поле avatar.
 
