@@ -1,23 +1,25 @@
 """Файл с задачами для Celery."""
 
 from celery import shared_task
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 from backend import settings
+from rest_api.models import Employee
+from tools.email_messages import greetings_body
 
 
 @shared_task
-def send_email(to: str, msg: str, subject: str):
+def greetings_via_email(employee: Employee):
     """
-    Задача для отпаравки писем.
+    Задача для отпаравки писем приветствия.
 
-    :param to: Email, на который необходимо отправить письмо
-    :param msg: Текст сообщения
-    :param subject: Тема письма
+    :param employee: сотрудник, которого надо поприветствовать
     """
-    send_mail(
-        subject=subject,
-        message=msg,
-        from_email=settings.EMAIL_HOST_USER,
-        recipient_list=[to]
+    message = EmailMessage(
+        settings.GREETINGS_SUBJECT,
+        greetings_body(employee.first_name, employee.middle_name),
+        settings.EMAIL_HOST_USER,
+        [employee.email]
     )
+    message.content_subtype = 'html'
+    message.send()

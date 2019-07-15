@@ -157,6 +157,9 @@ EMAIL_HOST_USER = 'nick.zhigalin@gmail.com'
 EMAIL_HOST_PASSWORD = 'qpmpjnobbrdkfxrp'
 EMAIL_USE_SSL = True
 
+# Настройка заголовков для отправки по электронной почте
+GREETINGS_SUBJECT = 'Добро пожаловать!'
+
 # Настройки для dev-режима
 if os.getenv('PROJECT_MODE') != 'production':
     DEBUG = True
