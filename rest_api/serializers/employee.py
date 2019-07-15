@@ -46,7 +46,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
 
         instance = Employee.objects.create(age=age, full_name=full_name, avatar=avatar, **validated_data)
 
-        greetings_via_email.delay(instance)
+        greetings_via_email.delay(instance.email, instance.first_name, instance.middle_name)
 
         return instance
 
