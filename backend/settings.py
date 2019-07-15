@@ -129,6 +129,10 @@ CORS_ORIGIN_WHITELIST = (
     'http://vps706754.ovh.net'
 )
 
+# Настройки SSL
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_SSL_REDIRECT = True
+
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 20,
@@ -165,3 +169,5 @@ if os.getenv('PROJECT_MODE') != 'production':
     }
     CORS_ORIGIN_ALLOW_ALL = True
     CELERY_BROKER_URL = 'sqla+sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
+    SECURE_SSL_REDIRECT = False
