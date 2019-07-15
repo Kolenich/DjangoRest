@@ -126,7 +126,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # Настроки CORS
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = (
-    'http://vps706754.ovh.net'
+    'https://vps706754.ovh.net'
 )
 
 # Настройки SSL
