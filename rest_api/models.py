@@ -1,8 +1,6 @@
 """Модели приложения rest_api."""
 
 from django.db import models
-from django.db.models.signals import post_delete
-from django.dispatch import receiver
 
 
 class Employee(models.Model):
@@ -46,16 +44,3 @@ class Avatar(models.Model):
 
     def __str__(self):
         return f'{self.file_name}'
-
-
-@receiver(post_delete, sender=Avatar)
-def submission_delete(sender, instance: Avatar, **kwargs):
-    """
-    Функция-сигнал для удаления файлов из файловой системы.
-
-    :param sender:
-    :param instance:
-    :param kwargs:
-    :return:
-    """
-    instance.file.delete(False)
