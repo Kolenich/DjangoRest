@@ -11,9 +11,9 @@ def submission_delete(sender, instance: Avatar, **kwargs):
     """
     Функция-сигнал для удаления файлов из файловой системы.
 
-    :param sender:
-    :param instance:
-    :param kwargs:
+    :param sender: отправитель сигнала
+    :param instance: объект удаленной модели
+    :param kwargs: дополнительные аргументы
     :return:
     """
     instance.file.delete(False)

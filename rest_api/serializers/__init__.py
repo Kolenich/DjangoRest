@@ -1,2 +1,2 @@
 from .avatar import AvatarSerializer
-from .employee import BaseEmployeeSerializer, EmployeeSerializer, EmployeeTableSerializer
+from .employee import EmployeeNestedSerializer, EmployeeSerializer, EmployeeTableSerializer
