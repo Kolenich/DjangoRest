@@ -5,8 +5,8 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
-from rest_api.models import Employee, Avatar
-from rest_api.serializers import BaseAvatarSerializer
+from rest_api.models import Employee
+from rest_api.serializers import AvatarSerializer
 from rest_api.tasks import greetings_via_email
 
 now = datetime.now()
@@ -25,7 +25,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
 
     age = serializers.IntegerField(read_only=True, required=False)
     full_name = serializers.CharField(read_only=True, required=False)
-    avatar = BaseAvatarSerializer(many=False, allow_null=True)
+    avatar = AvatarSerializer(many=False, read_only=True, required=False)
 
     def create(self, validated_data: dict) -> Employee:
         """
@@ -40,11 +40,7 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         if validated_data['middle_name'] is not None:
             full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
 
-        avatar = validated_data.pop('avatar', None)
-        if avatar is not None:
-            avatar = Avatar.objects.create(**avatar)
-
-        instance = Employee.objects.create(age=age, full_name=full_name, avatar=avatar, **validated_data)
+        instance = Employee.objects.create(age=age, full_name=full_name, **validated_data)
 
         greetings_via_email.delay(instance.email, instance.first_name, instance.middle_name)
 
@@ -64,20 +60,8 @@ class EmployeeSerializer(BaseEmployeeSerializer):
         if validated_data['middle_name'] is not None:
             full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
 
-        # Удаляем старый аватар, если имеется
-        current_avatar = instance.avatar
-        if current_avatar is not None:
-            current_avatar.delete()
-
-        avatar = validated_data.pop('avatar', None)
-
-        # Создаём новый аватар
-        if avatar is not None:
-            avatar = Avatar.objects.create(**avatar)
-
         validated_data['full_name'] = full_name
         validated_data['age'] = age
-        validated_data['avatar'] = avatar
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
