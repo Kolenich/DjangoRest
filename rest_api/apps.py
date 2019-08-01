@@ -14,3 +14,5 @@ class RestApiConfig(AppConfig):
 
         :return:
         """
+        # noinspection PyUnresolvedReferences
+        from rest_api import signals
