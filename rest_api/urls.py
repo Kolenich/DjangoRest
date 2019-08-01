@@ -2,11 +2,12 @@
 
 from rest_framework.routers import DefaultRouter
 
-from rest_api.views import EmployeeViewSet, EmployeeTableViewSet
+from rest_api.views import AvatarViewSet, EmployeeTableViewSet, EmployeeViewSet
 
 ROUTER = DefaultRouter()
 
-ROUTER.register(r'employees', EmployeeViewSet)
-ROUTER.register(r'employees-table', EmployeeTableViewSet)
+ROUTER.register(r'employee', EmployeeViewSet)
+ROUTER.register(r'employee-table', EmployeeTableViewSet)
+ROUTER.register(r'avatar', AvatarViewSet)
 
 urlpatterns = ROUTER.urls
