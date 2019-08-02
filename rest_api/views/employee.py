@@ -23,7 +23,7 @@ class EmployeeTableViewSet(EmployeeViewSet):
         'age': ('gte', 'gt', 'lte', 'lt', 'exact'),
         'full_name': ('icontains', 'istartswith', 'iendswith', 'exact'),
         'sex': ('exact',),
-        'registration_date': ('gte', 'lte'),
-        'date_of_birth': ('gte', 'lte'),
+        'registration_date': ('gte', 'gt', 'lte', 'lt'),
+        'date_of_birth': ('gte', 'gt', 'lte', 'lt', 'exact'),
     }
     ordering_fields = ('phone', 'email', 'age', 'full_name', 'sex', 'registration_date', 'date_of_birth')

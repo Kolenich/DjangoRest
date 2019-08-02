@@ -74,24 +74,11 @@ class EmployeeNestedSerializer(EmployeeSerializer):
 class EmployeeTableSerializer(EmployeeSerializer):
     """Сериалайзер модели Employee для отображения в таблице."""
 
-    sex = serializers.SerializerMethodField()
     avatar = serializers.SerializerMethodField()
 
     class Meta:
         model = EmployeeSerializer.Meta.model
         fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex', 'avatar')
-
-    @staticmethod
-    def get_sex(instance: Employee) -> str:
-        """
-        Функция получения значения в поле sex.
-
-        :param instance: объект модели Employee
-        :return: Муж. или Жен.
-        """
-        if instance.sex == 'male':
-            return 'Муж.'
-        return 'Жен.'
 
     @staticmethod
     def get_avatar(instance: Employee) -> str or None:
