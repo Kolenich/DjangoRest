@@ -49,14 +49,15 @@ class EmployeeNestedSerializer(EmployeeSerializer):
         :param validated_data: провалидированные данные
         :return: объект обновленной модели
         """
-        age = int(relativedelta(now, validated_data['date_of_birth']).years)
-
-        validated_data['age'] = age
+        date_of_birth = validated_data.get('date_of_birth', None)
+        if date_of_birth is not None:
+            age = int(relativedelta(now, validated_data['date_of_birth']).years)
+            validated_data['age'] = age
 
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
 
-        instance.save()
+        instance.save(update_fields=validated_data.keys())
 
         return instance
 
