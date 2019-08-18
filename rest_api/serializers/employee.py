@@ -24,7 +24,6 @@ class EmployeeNestedSerializer(EmployeeSerializer):
     """Сериалайзер для модели Employee."""
 
     age = serializers.IntegerField(read_only=True, required=False)
-    full_name = serializers.CharField(read_only=True, required=False)
     avatar = AvatarSerializer(many=False, read_only=True, required=False)
 
     def create(self, validated_data: dict) -> Employee:
@@ -36,11 +35,7 @@ class EmployeeNestedSerializer(EmployeeSerializer):
         """
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
 
-        full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
-        if validated_data['middle_name'] is not None:
-            full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
-
-        instance = Employee.objects.create(age=age, full_name=full_name, **validated_data)
+        instance = Employee.objects.create(age=age, **validated_data)
 
         greetings_via_email.delay(instance.email, instance.first_name, instance.middle_name)
 
@@ -56,11 +51,6 @@ class EmployeeNestedSerializer(EmployeeSerializer):
         """
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
 
-        full_name = f'{validated_data["last_name"]} {validated_data["first_name"]}'
-        if validated_data['middle_name'] is not None:
-            full_name = f'{validated_data["last_name"]} {validated_data["first_name"]} {validated_data["middle_name"]}'
-
-        validated_data['full_name'] = full_name
         validated_data['age'] = age
 
         for attr, value in validated_data.items():
@@ -78,7 +68,9 @@ class EmployeeTableSerializer(EmployeeSerializer):
 
     class Meta:
         model = EmployeeSerializer.Meta.model
-        fields = ('id', 'full_name', 'registration_date', 'phone', 'email', 'date_of_birth', 'age', 'sex', 'avatar')
+        fields = (
+            'id', 'first_name', 'last_name', 'middle_name', 'registration_date', 'phone', 'email', 'date_of_birth',
+            'age', 'sex', 'avatar')
 
     @staticmethod
     def get_avatar(instance: Employee) -> str or None:
