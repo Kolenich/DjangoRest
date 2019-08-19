@@ -3,7 +3,7 @@
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
-from rest_api.models import Avatar, Employee
+from rest_api.models import Employee
 
 
 @receiver(post_delete, sender=Employee)
@@ -16,9 +16,6 @@ def submission_delete(sender, instance: Employee, **kwargs):
     :param kwargs: дополнительные аргументы
     :return:
     """
-    avatar = instance.avatar
-    if avatar is not None:
-        try:
-            avatar.delete()
-        except Avatar.DoesNotExist:
-            pass
+
+    if instance.avatar is not None:
+        instance.avatar.delete()
