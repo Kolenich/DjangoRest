@@ -162,15 +162,4 @@ GREETINGS_SUBJECT = 'Добро пожаловать!'
 
 # Настройки для dev-режима
 if os.getenv('PROJECT_MODE') != 'production':
-    DEBUG = True
-    ALLOWED_HOSTS = ['*']
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        }
-    }
-    CORS_ORIGIN_ALLOW_ALL = True
-    CELERY_BROKER_URL = 'sqla+sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'http')
-    SECURE_SSL_REDIRECT = False
+    from .settings_dev import *
