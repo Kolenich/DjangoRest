@@ -16,6 +16,5 @@ def submission_delete(sender, instance: Employee, **kwargs):
     :param kwargs: дополнительные аргументы
     :return:
     """
-
     if instance.avatar is not None:
         instance.avatar.delete()
