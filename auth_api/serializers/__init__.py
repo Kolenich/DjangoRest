@@ -1,1 +1,1 @@
-from .user import BaseUserSerializer
+from .user import UserSerializer

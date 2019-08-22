@@ -2,10 +2,10 @@
 
 from rest_framework.routers import DefaultRouter
 
-from auth_api.views import UserViewSet
+from auth_api.views import UserRegistrationViewSet
 
 ROUTER = DefaultRouter()
 
-ROUTER.register(r'users', UserViewSet)
+ROUTER.register(r'user', UserRegistrationViewSet)
 
 urlpatterns = ROUTER.urls
