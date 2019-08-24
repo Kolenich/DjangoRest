@@ -1,6 +1,5 @@
 """Файл с viewset'ами для модели User."""
 
-from django.contrib.auth.hashers import make_password
 from django.db.utils import IntegrityError
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -35,15 +34,8 @@ class UserRegistrationViewSet(UserViewSet):
         """
         data = {'message': 'Неверные данные'}
         response = Response(data, HTTP_400_BAD_REQUEST)
-
-        data = {
-            'password': make_password(request.data['password']),
-            'first_name': request.data['first_name'],
-            'last_name': request.data['last_name'],
-            'email': request.data['email']
-        }
         try:
-            User.objects.create(**data)
+            User.objects.create_user(**request.data)
             data['message'] = 'Пользователь создан успешно'
             response = Response(data, HTTP_201_CREATED)
         except IntegrityError:
