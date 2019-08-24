@@ -9,6 +9,14 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def _create_user(self, email: str, password: str, **extra_fields):
+        """
+        Создание пользователя.
+
+        :param email: почта
+        :param password: пароль
+        :param extra_fields: дополнительные поля
+        :return: созданный пользователь
+        """
         if not email:
             raise ValueError('Необходимо указать email.')
 
@@ -21,14 +29,28 @@ class UserManager(BaseUserManager):
         return user
 
     def create_user(self, email: str = None, password: str = None, **extra_fields):
-        """Метод для создания обычного юзера."""
+        """
+        Метод для создания обычного юзера.
+
+        :param email: почта
+        :param password: пароль
+        :param extra_fields: дополнительные поля
+        :return:
+        """
         extra_fields.setdefault('is_staff', False)
         extra_fields.setdefault('is_superuser', False)
 
         return self._create_user(email, password, **extra_fields)
 
     def create_superuser(self, email: str, password: str, **extra_fields):
-        """Метод для создания супер юзера."""
+        """
+        Метод для создания супер юзера.
+
+        :param email: почта
+        :param password: пароль
+        :param extra_fields: дополнительные поля
+        :return:
+        """
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
 
