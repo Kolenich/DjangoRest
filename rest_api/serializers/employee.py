@@ -5,7 +5,7 @@ from datetime import datetime
 from dateutil.relativedelta import relativedelta
 from rest_framework import serializers
 
-from rest_api.models import Employee
+from rest_api.models import Avatar, Employee
 from rest_api.serializers import AvatarSerializer
 from rest_api.tasks import greetings_via_email
 
@@ -24,7 +24,7 @@ class EmployeeNestedSerializer(EmployeeSerializer):
     """Сериалайзер для модели Employee."""
 
     age = serializers.IntegerField(read_only=True, required=False)
-    avatar = AvatarSerializer(many=False, read_only=True, required=False)
+    avatar = AvatarSerializer(many=False, required=False)
 
     def create(self, validated_data: dict) -> Employee:
         """
@@ -35,7 +35,15 @@ class EmployeeNestedSerializer(EmployeeSerializer):
         """
         age = int(relativedelta(now, validated_data['date_of_birth']).years)
 
-        instance = Employee.objects.create(age=age, **validated_data)
+        avatar_object = validated_data.pop('avatar', None)
+        avatar = None
+        if avatar_object is not None:
+            avatar = Avatar.objects.create(**avatar_object)
+
+        validated_data['age'] = age
+        validated_data['avatar'] = avatar
+
+        instance = Employee.objects.create(**validated_data)
 
         greetings_via_email.delay(instance.email, instance.first_name, instance.middle_name)
 
