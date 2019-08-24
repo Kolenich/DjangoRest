@@ -8,7 +8,6 @@ import auth_api.managers
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
