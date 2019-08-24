@@ -40,6 +40,11 @@ class UserRegistrationViewSet(UserViewSet):
             response = Response(data, HTTP_201_CREATED)
         except IntegrityError:
             data['message'] = 'Пользователь с данной почтой уже существует'
+            data['errors'] = ('email',)
+            response = Response(data, HTTP_400_BAD_REQUEST)
+        except ValueError:
+            data['message'] = 'Необходимо указать email'
+            data['errors'] = ('email',)
             response = Response(data, HTTP_400_BAD_REQUEST)
 
         return response
