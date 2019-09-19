@@ -1,7 +1,9 @@
 <body>
-  {% if middle_name != None %}
-    <p>Добро пожаловать, {{ first_name }} {{ middle_name }}!</p>
-  {% else %}
-    <p>Добро пожаловать, {{ first_name }}!</p>
-  {% endif %}
+  <p>
+    {% if middle_name != None %}
+      Добро пожаловать, {{ first_name }} {{ middle_name }}!
+    {% else %}
+      Добро пожаловать, {{ first_name }}!
+    {% endif %}
+  </p>
 </body>
