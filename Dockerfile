@@ -8,6 +8,8 @@ WORKDIR /app
 
 EXPOSE 8000
 
+RUN pip install gunicorn
+
 COPY requirements.txt /app/
 
 RUN pip install -r requirements.txt
