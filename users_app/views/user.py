@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
 from users_app.models import User
-from users_app.serializers import UserSerializer
+from users_app.serializers import UserAssignerSerializer, UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -17,6 +17,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class UserAssignerViewset(UserViewSet):
+    """Viewset для выгрузки всех юзеров для отображения в строке фильтрации для таблицы задач."""
+
+    serializer_class = UserAssignerSerializer
 
 
 class UserRegistrationViewSet(UserViewSet):

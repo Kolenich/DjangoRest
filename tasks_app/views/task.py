@@ -3,7 +3,7 @@
 from rest_framework import viewsets
 
 from tasks_app.models import Task
-from tasks_app.serializers import TaskSerializer
+from tasks_app.serializers import TaskSerializer, TaskTableSerializer
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -16,6 +16,8 @@ class TaskViewSet(viewsets.ModelViewSet):
 class TaskTableViewset(TaskViewSet):
     """Табличное представление всех задач."""
 
+    serializer_class = TaskTableSerializer
+
     filterset_fields = {
         'summary': ('icontains', 'istartswith', 'iendswith', 'exact',),
         'description': ('icontains', 'istartswith', 'iendswith', 'exact'),
@@ -23,5 +25,7 @@ class TaskTableViewset(TaskViewSet):
         'date_of_issue': ('gte', 'gt', 'lte', 'lt', 'exact'),
         'dead_line': ('gte', 'gt', 'lte', 'lt', 'exact'),
         'done': ('exact',),
+        'assigned_by_id': ('exact',),
+        'assigned_to_id': ('exact',),
     }
-    ordering_fields = ('summary', 'description', 'comment', 'date_of_issue', 'dead_line', 'done')
+    ordering_fields = '__all__'
