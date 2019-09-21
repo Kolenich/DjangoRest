@@ -22,7 +22,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include('rest_auth.urls')),
     path('rest_api/', include('rest_api.urls')),
-    path('auth_api/', include('auth_api.urls')),
+    path('users_api/', include('users_app.urls')),
+    path('tasks_api/', include('tasks_app.urls')),
 ]
 
 if settings.DEBUG:

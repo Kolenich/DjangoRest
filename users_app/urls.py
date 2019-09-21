@@ -1,8 +1,8 @@
-"""Настройки URL'ов для приложения auth_api."""
+"""Настройки URL'ов для приложения users_app."""
 
 from rest_framework.routers import DefaultRouter
 
-from auth_api.views import UserRegistrationViewSet
+from users_app.views import UserRegistrationViewSet
 
 ROUTER = DefaultRouter()
 

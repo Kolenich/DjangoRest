@@ -8,8 +8,8 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
-from auth_api.models import User
-from auth_api.serializers import UserSerializer
+from users_app.models import User
+from users_app.serializers import UserSerializer
 
 
 class UserViewSet(viewsets.ModelViewSet):

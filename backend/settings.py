@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'django_filters',
     'rest_api',
-    'auth_api',
+    'users_app',
+    'tasks_app',
 ]
 
 MIDDLEWARE = [
@@ -99,7 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-AUTH_USER_MODEL = 'auth_api.User'
+AUTH_USER_MODEL = 'users_app.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -145,7 +146,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.OrderingFilter',
     ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',

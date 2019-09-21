@@ -2,7 +2,7 @@
 
 from rest_framework import serializers
 
-from auth_api.models import User
+from users_app.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):

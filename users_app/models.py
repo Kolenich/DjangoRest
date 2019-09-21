@@ -1,4 +1,4 @@
-"""Модели приложения auth_api."""
+"""Модели приложения users_app."""
 
 import uuid
 
@@ -44,7 +44,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
-        ordering = ('id',)
 
     def __str__(self):
         return f'{self.first_name} {self.last_name} {self.email}'
