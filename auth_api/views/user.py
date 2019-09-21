@@ -43,7 +43,7 @@ class UserRegistrationViewSet(UserViewSet):
             data['errors'] = ('email',)
             response = Response(data, HTTP_400_BAD_REQUEST)
         except ValueError:
-            data['message'] = 'Необходимо указать email'
+            data['message'] = 'Необходимо указать электронную почту'
             data['errors'] = ('email',)
             response = Response(data, HTTP_400_BAD_REQUEST)
 
