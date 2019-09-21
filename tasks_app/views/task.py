@@ -1,16 +1,37 @@
 """ViewSet'ы для модели Task."""
 
-from rest_framework import viewsets
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from tasks_app.models import Task
 from tasks_app.serializers import TaskSerializer, TaskTableSerializer
+from tools import CustomListMixin
 
 
-class TaskViewSet(viewsets.ModelViewSet):
+class TaskViewSet(CustomListMixin):
     """ViewSet для модели Task."""
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        """
+        Переопределние метода выдачи списка заданий.
+
+        Возвращает только те задания, которые назначены зарегистрированному пользователю.
+
+        :param request: объект запроса
+        :param args: дополнительные параметры списом
+        :param kwargs: дополнительные параметры словарем
+        :return: отфильтрованный кверисет
+        """
+        user_id = request.user.id
+
+        queryset = Task.objects.filter(assigned_to_id=user_id)
+
+        response = self.custom_list(queryset)
+
+        return response
 
 
 class TaskTableViewset(TaskViewSet):

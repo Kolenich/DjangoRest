@@ -8,6 +8,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
+from tools import CustomListMixin
 from users_app.models import User
 from users_app.serializers import UserAssignerSerializer, UserSerializer
 
@@ -19,10 +20,29 @@ class UserViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
 
 
-class UserAssignerViewset(UserViewSet):
+class UserAssignerViewset(UserViewSet, CustomListMixin):
     """Viewset для выгрузки всех юзеров для отображения в строке фильтрации для таблицы задач."""
 
     serializer_class = UserAssignerSerializer
+
+    def list(self, request: Request, *args, **kwargs) -> Response:
+        """
+        Переопределение метода выдачи пользователей для фильтрации по заказчику.
+
+        Ислючает из списка пользователя, сделавшего запрос.
+
+        :param request: объект запроса
+        :param args: дополнительные параметры списом
+        :param kwargs: дополнительные параметры словарем
+        :return: отфильтрованный кверисет
+        """
+        user_id = request.user.id
+
+        queryset = User.objects.exclude(id=user_id)
+
+        response = self.custom_list(queryset)
+
+        return response
 
 
 class UserRegistrationViewSet(UserViewSet):
