@@ -1,5 +1,6 @@
 """Файл классов-примесей."""
 
+from django.db.models.query import QuerySet
 from rest_framework import viewsets
 from rest_framework.response import Response
 
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 class CustomModelViewSet(viewsets.ModelViewSet):
     """Класс-примесь для ModelViewset."""
 
-    def custom_list(self, queryset) -> Response:
+    def custom_list(self, queryset: QuerySet) -> Response:
         """
         Кастомный метод отдачи данных на основании переданного кверисета.
 
