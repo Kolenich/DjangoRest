@@ -59,20 +59,23 @@ class UserRegistrationViewSet(UserViewSet):
         data = {'message': 'Неверные данные'}
         response = Response(data, HTTP_400_BAD_REQUEST)
 
-        if request.data['first_name'] == '':
-            data['message'] = 'Имя не может быть пустым'
-            data['errors'] = {'first_name': True}
-            return Response(data, HTTP_400_BAD_REQUEST)
+        try:
+            if request.data['first_name'] == '':
+                data['message'] = 'Имя не может быть пустым'
+                data['errors'] = {'first_name': True}
+                return Response(data, HTTP_400_BAD_REQUEST)
 
-        if request.data['last_name'] == '':
-            data['message'] = 'Фамилия не может быть пустой'
-            data['errors'] = {'last_name': True}
-            return Response(data, HTTP_400_BAD_REQUEST)
+            if request.data['last_name'] == '':
+                data['message'] = 'Фамилия не может быть пустой'
+                data['errors'] = {'last_name': True}
+                return Response(data, HTTP_400_BAD_REQUEST)
 
-        if request.data['password'] == '':
-            data['message'] = 'Необходимо указать пароль'
-            data['errors'] = {'password': True}
-            return Response(data, HTTP_400_BAD_REQUEST)
+            if request.data['password'] == '':
+                data['message'] = 'Необходимо указать пароль'
+                data['errors'] = {'password': True}
+                return Response(data, HTTP_400_BAD_REQUEST)
+        except KeyError:
+            return response
 
         try:
             User.objects.create_user(**request.data)
