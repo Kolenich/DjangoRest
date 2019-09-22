@@ -59,17 +59,33 @@ class UserRegistrationViewSet(UserViewSet):
         """
         data = {'message': 'Неверные данные'}
         response = Response(data, HTTP_400_BAD_REQUEST)
+
+        if request.data['first_name'] == '':
+            data['message'] = 'Имя не может быть пустым'
+            data['errors'] = {'first_name': True}
+            return Response(data, HTTP_400_BAD_REQUEST)
+
+        if request.data['last_name'] == '':
+            data['message'] = 'Фамилия не может быть пустой'
+            data['errors'] = {'last_name': True}
+            return Response(data, HTTP_400_BAD_REQUEST)
+
+        if request.data['password'] == '':
+            data['message'] = 'Необходимо указать пароль'
+            data['errors'] = {'password': True}
+            return Response(data, HTTP_400_BAD_REQUEST)
+
         try:
             User.objects.create_user(**request.data)
             data['message'] = 'Пользователь создан успешно'
             response = Response(data, HTTP_201_CREATED)
         except IntegrityError:
             data['message'] = 'Пользователь с данной почтой уже существует'
-            data['errors'] = ('email',)
+            data['errors'] = {'email': True}
             response = Response(data, HTTP_400_BAD_REQUEST)
         except ValueError:
             data['message'] = 'Необходимо указать электронную почту'
-            data['errors'] = ('email',)
+            data['errors'] = {'email': True}
             response = Response(data, HTTP_400_BAD_REQUEST)
 
         return response
