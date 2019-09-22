@@ -4,7 +4,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from tasks_app.models import Task
-from tasks_app.serializers import TaskSerializer, TaskTableSerializer
+from tasks_app.serializers import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer
 from tools import CustomModelViewSet
 
 
@@ -13,6 +13,18 @@ class TaskViewSet(CustomModelViewSet):
 
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
+
+
+class TaskDetailViewSet(TaskViewSet):
+    """ViewSet модели Task для отображения деталей задания."""
+
+    serializer_class = TaskDetailSerializer
+
+
+class AssignedTaskViewSet(TaskViewSet):
+    """ViewSet для сохранения задач в БД."""
+
+    serializer_class = AssignedTaskSerializer
 
 
 class TaskTableViewset(TaskViewSet):

@@ -24,4 +24,4 @@ class Task(models.Model):
         verbose_name_plural = 'Задания'
 
     def __str__(self):
-        return self.summary
+        return f'{self.summary}, для {self.assigned_to.last_name} {self.assigned_to.first_name}'

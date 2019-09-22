@@ -1,1 +1,1 @@
-from .task import TaskSerializer, TaskTableSerializer
+from .task import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer

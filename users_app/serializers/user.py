@@ -5,12 +5,25 @@ from rest_framework import serializers
 from users_app.models import User
 
 
+class UserMeta:
+    """Базовый мета-класс для сериалайзеров модели User."""
+
+    model = User
+    fields = '__all__'
+
+
 class UserSerializer(serializers.ModelSerializer):
     """Базовый сериалайзер модели User."""
 
-    class Meta:
-        model = User
-        fields = '__all__'
+    class Meta(UserMeta):
+        pass
+
+
+class UserTaskDetailSerializer(UserSerializer):
+    """Сериалайзер модели User для отображения в подробностях задания."""
+
+    class Meta(UserMeta):
+        fields = ('first_name', 'last_name')
 
 
 class UserAssignmentSerializer(UserSerializer):
@@ -20,8 +33,7 @@ class UserAssignmentSerializer(UserSerializer):
     label = serializers.SerializerMethodField()
     key = serializers.SerializerMethodField()
 
-    class Meta:
-        model = User
+    class Meta(UserMeta):
         fields = ('key', 'value', 'label')
 
     @staticmethod
