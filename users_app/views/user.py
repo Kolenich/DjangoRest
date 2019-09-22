@@ -22,6 +22,7 @@ class UserViewSet(CustomModelViewSet):
 class UserAssignmentViewset(UserViewSet):
     """Viewset для выгрузки всех юзеров для отображения в строке фильтрации для таблицы задач."""
 
+    queryset = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
     serializer_class = UserAssignmentSerializer
 
     def list(self, request: Request, *args, **kwargs) -> Response:
@@ -37,7 +38,7 @@ class UserAssignmentViewset(UserViewSet):
         """
         user_id = request.user.id
 
-        queryset = User.objects.exclude(id=user_id)
+        queryset = self.get_queryset().exclude(id=user_id)
 
         response = self.custom_list(queryset)
 
