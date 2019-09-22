@@ -4,7 +4,7 @@ from rest_framework import viewsets
 from rest_framework.response import Response
 
 
-class CustomListMixin(viewsets.ModelViewSet):
+class CustomModelViewSet(viewsets.ModelViewSet):
     """Класс-примесь для ModelViewset."""
 
     def custom_list(self, queryset) -> Response:

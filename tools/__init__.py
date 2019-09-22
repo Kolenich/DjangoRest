@@ -1,1 +1,1 @@
-from .mixins import CustomListMixin
+from .mixins import CustomModelViewSet

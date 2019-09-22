@@ -1,26 +1,25 @@
 """Файл с viewset'ами для модели User."""
 
 from django.db.utils import IntegrityError
-from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 
-from tools import CustomListMixin
+from tools import CustomModelViewSet
 from users_app.models import User
 from users_app.serializers import UserAssignerSerializer, UserSerializer
 
 
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(CustomModelViewSet):
     """Базовый viewset для модели Пользователя."""
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 
-class UserAssignerViewset(UserViewSet, CustomListMixin):
+class UserAssignerViewset(UserViewSet):
     """Viewset для выгрузки всех юзеров для отображения в строке фильтрации для таблицы задач."""
 
     serializer_class = UserAssignerSerializer
