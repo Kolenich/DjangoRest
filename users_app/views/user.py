@@ -36,9 +36,7 @@ class UserAssignmentViewset(UserViewSet):
         :param kwargs: дополнительные параметры словарем
         :return: отфильтрованный кверисет
         """
-        user_id = request.user.id
-
-        queryset = self.get_queryset().exclude(id=user_id)
+        queryset = self.get_queryset().exclude(id=request.user.id)
 
         response = self.custom_list(queryset)
 
