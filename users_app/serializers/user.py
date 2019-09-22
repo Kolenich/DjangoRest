@@ -13,7 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-class UserAssignerSerializer(UserSerializer):
+class UserAssignmentSerializer(UserSerializer):
     """Представление модели User для фльтрации в таблице задач."""
 
     value = serializers.SerializerMethodField(method_name='select_value')

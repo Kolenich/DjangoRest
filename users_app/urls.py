@@ -2,11 +2,11 @@
 
 from rest_framework.routers import DefaultRouter
 
-from users_app.views import UserAssignerViewset, UserRegistrationViewSet
+from users_app.views import UserAssignmentViewset, UserRegistrationViewSet
 
 ROUTER = DefaultRouter()
 
 ROUTER.register(r'user', UserRegistrationViewSet)
-ROUTER.register(r'user-assigner', UserAssignerViewset)
+ROUTER.register(r'user-assigner', UserAssignmentViewset)
 
 urlpatterns = ROUTER.urls
