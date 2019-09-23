@@ -1,21 +1,48 @@
-<body>
-  <h1 style="padding: 10px">{{ assigned_by }} назначил Вам задание.</h1>
-  <table>
-    <thead>
-      <tr>
-        <td>Краткое описание</td>
-        <td>Полное описание</td>
-        <td>Срок исполнения</td>
-        <td>Комментарий</td>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>{{ summary }}</td>
-        <td>{{ description }}</td>
-        <td>{{ dead_line }}</td>
-        <td>{{ comment }}</td>
-      </tr>
-    </tbody>
-  </table>
-</body>
+{% load i18n %}
+<html lang="ru">
+  <head>
+    <style>
+      .title {
+        padding: 10px;
+        font-style: italic;
+      }
+
+      .table {
+        border: 1px solid black;
+      }
+
+      td.head {
+        border: 1px solid black;
+        font-size: large;
+        font-weight: bold;
+      }
+
+      td.body {
+        border: 1px solid black
+      }
+    </style>
+    <title></title>
+  </head>
+  <body>
+    <h2 class="title">{{ assigned_by }} назначил(а) Вам задание.</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <td class="head">Краткое описание</td>
+          <td class="head">Полное описание</td>
+          <td class="head">Срок исполнения</td>
+          <td class="head">Комментарий</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="body">{{ summary }}</td>
+          <td class="body">{{ description }}</td>
+          <td class="body">{{ dead_line }}</td>
+          <td class="body">{{ comment }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </body>
+</html>
+

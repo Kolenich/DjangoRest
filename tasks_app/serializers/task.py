@@ -57,7 +57,7 @@ class AssignedTaskSerializer(TaskSerializer):
         task = {
             'summary': validated_data['summary'],
             'description': validated_data['description'],
-            'dead_line': validated_data['dead_line'],
+            'dead_line': validated_data['dead_line'].strftime('%d.%m.%Y'),
             'comment': validated_data['comment'],
         }
         assigned_by = f'{request.user.last_name} {request.user.first_name}'
