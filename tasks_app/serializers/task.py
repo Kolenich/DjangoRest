@@ -72,6 +72,10 @@ class TaskTableSerializer(TaskSerializer):
 
     assigned_by = serializers.SerializerMethodField()
 
+    class Meta(TaskMeta):
+        fields = None
+        exclude = ('done',)
+
     @staticmethod
     def get_assigned_by(instance: Task) -> str:
         """

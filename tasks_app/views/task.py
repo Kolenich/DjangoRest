@@ -42,7 +42,7 @@ class TaskTableViewset(TaskViewSet):
         'assigned_by_id': ('exact',),
         'assigned_to_id': ('exact',),
     }
-    ordering_fields = '__all__'
+    ordering_fields = ('summary', 'description', 'comment', 'date_of_issue', 'dead_line', 'assigned_by__last_name')
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         """
