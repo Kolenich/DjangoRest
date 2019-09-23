@@ -30,8 +30,8 @@ class UserAssignmentSerializer(UserSerializer):
     """Представление модели User для фльтрации в таблице задач."""
 
     value = serializers.SerializerMethodField(method_name='select_value')
-    label = serializers.SerializerMethodField()
-    key = serializers.SerializerMethodField()
+    label = serializers.SerializerMethodField(method_name='select_label')
+    key = serializers.SerializerMethodField(method_name='select_key')
 
     class Meta(UserMeta):
         fields = ('key', 'value', 'label')
@@ -47,7 +47,7 @@ class UserAssignmentSerializer(UserSerializer):
         return instance.id
 
     @staticmethod
-    def get_label(instance: User) -> str:
+    def select_label(instance: User) -> str:
         """
         Метод для получения ярлыка для селекта фильтрации в таблице задач.
 
@@ -57,7 +57,7 @@ class UserAssignmentSerializer(UserSerializer):
         return f'{instance.last_name} {instance.first_name}'
 
     @staticmethod
-    def get_key(instance: User) -> int:
+    def select_key(instance: User) -> int:
         """
          Метод для получения ключа для селекта фильтрации в таблице задач.
 
