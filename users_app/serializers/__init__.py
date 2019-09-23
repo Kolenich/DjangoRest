@@ -1,1 +1,1 @@
-from .user import UserAssignmentSerializer, UserSerializer, UserTaskDetailSerializer
+from .user import UserAssignmentSerializer, UserProfileSerializer, UserSerializer, UserTaskDetailSerializer

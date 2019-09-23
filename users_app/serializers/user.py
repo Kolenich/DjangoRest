@@ -26,6 +26,13 @@ class UserTaskDetailSerializer(UserSerializer):
         fields = ('first_name', 'last_name')
 
 
+class UserProfileSerializer(UserSerializer):
+    """Сериалайзер модели User для отображения в угловом меню."""
+
+    class Meta(UserMeta):
+        fields = ('first_name', 'last_name', 'email')
+
+
 class UserAssignmentSerializer(UserSerializer):
     """Представление модели User для фльтрации в таблице задач."""
 

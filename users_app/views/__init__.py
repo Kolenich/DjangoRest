@@ -1,1 +1,1 @@
-from .user import UserAssignmentViewset, UserRegistrationViewSet, UserViewSet
+from .user import UserAssignmentViewset, UserProfileViewSet, UserRegistrationViewSet, UserViewSet
