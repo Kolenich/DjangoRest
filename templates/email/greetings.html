@@ -1,9 +1,21 @@
 <body>
-  <p>
-    {% if middle_name != None %}
-      Добро пожаловать, {{ first_name }} {{ middle_name }}!
-    {% else %}
-      Добро пожаловать, {{ first_name }}!
-    {% endif %}
-  </p>
+  <h1 style="padding: 10px">{{ assigned_by }} назначил Вам задание.</h1>
+  <table>
+    <thead>
+      <tr>
+        <td>Краткое описание</td>
+        <td>Полное описание</td>
+        <td>Срок исполнения</td>
+        <td>Комментарий</td>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{ summary }}</td>
+        <td>{{ description }}</td>
+        <td>{{ dead_line }}</td>
+        <td>{{ comment }}</td>
+      </tr>
+    </tbody>
+  </table>
 </body>

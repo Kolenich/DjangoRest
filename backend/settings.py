@@ -164,7 +164,7 @@ EMAIL_HOST_PASSWORD = 'qpmpjnobbrdkfxrp'
 EMAIL_USE_SSL = True
 
 # Настройка заголовков для отправки по электронной почте
-TASK_ASSIGNED_SUBJECT = 'Вам назначена задание'
+TASK_ASSIGNED_SUBJECT = 'Вам назначено задание'
 
 # Настройки для dev-режима
 if os.getenv('PROJECT_MODE') != 'production':
