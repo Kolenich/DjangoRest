@@ -9,15 +9,20 @@ class Task(models.Model):
     """Модель задания."""
 
     summary = models.CharField(verbose_name='Краткое описание', max_length=128)
+
     description = models.TextField(verbose_name='Описание')
-    date_of_issue = models.DateField(verbose_name='Дата назначения', auto_now_add=True)
+    comment = models.TextField(verbose_name='Комментарий', null=True, blank=True)
+
+    date_of_issue = models.DateTimeField(verbose_name='Дата назначения', auto_now_add=True)
+    dead_line = models.DateTimeField(verbose_name='Срок исполнения', null=True, blank=True)
+
+    done = models.BooleanField(verbose_name='Выполнено', default=False)
+    archived = models.BooleanField(verbose_name='В архиве', default=False)
+
     assigned_by = models.ForeignKey(to='users_app.User', verbose_name='Кто назначил', on_delete=models.CASCADE,
                                     related_name='tasks_assigned')
     assigned_to = models.ForeignKey(to='users_app.User', verbose_name='Кому назначено', on_delete=models.CASCADE,
                                     related_name='tasks_taken')
-    done = models.BooleanField(verbose_name='Выполнено', default=False)
-    dead_line = models.DateField(verbose_name='Срок исполнения', null=True, blank=True)
-    comment = models.TextField(verbose_name='Комментарий', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Задание'

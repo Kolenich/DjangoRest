@@ -36,8 +36,8 @@ class TaskTableViewset(TaskViewSet):
         'summary': ('icontains', 'istartswith', 'iendswith', 'exact',),
         'description': ('icontains', 'istartswith', 'iendswith', 'exact'),
         'comment': ('icontains', 'istartswith', 'iendswith', 'exact'),
-        'date_of_issue': ('gte', 'gt', 'lte', 'lt', 'exact'),
-        'dead_line': ('gte', 'gt', 'lte', 'lt', 'exact'),
+        'date_of_issue': ('gte', 'gt', 'lte', 'lt'),
+        'dead_line': ('gte', 'gt', 'lte', 'lt'),
         'done': ('exact',),
         'assigned_by_id': ('exact',),
         'assigned_to_id': ('exact',),
@@ -57,7 +57,7 @@ class TaskTableViewset(TaskViewSet):
         """
         user_id = request.user.id
 
-        queryset = self.get_queryset().filter(assigned_to_id=user_id)
+        queryset = self.get_queryset().filter(assigned_to_id=user_id, archived=False)
 
         response = self.custom_list(queryset)
 
