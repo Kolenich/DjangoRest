@@ -6,7 +6,8 @@ WORKDIR /app
 
 EXPOSE 8000
 
-RUN pip install gunicorn
+RUN pip install --upgrade pip \
+ && pip install gunicorn
 
 COPY requirements.txt /app/
 
