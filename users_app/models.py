@@ -13,14 +13,18 @@ class User(AbstractBaseUser, PermissionsMixin):
     """Модель пользователя. Используется вместо стандартной джанговской модели."""
 
     uid = models.UUIDField(verbose_name='UID пользователя', editable=False, unique=True, default=uuid.uuid4)
+
     is_active = models.BooleanField(verbose_name='Пользователь активен', default=True, blank=True)
     is_staff = models.BooleanField(verbose_name='Статус админа', default=False, blank=True)
     is_superuser = models.BooleanField(verbose_name='Статус супер-админа', default=False, blank=True)
+    mailing = models.BooleanField(verbose_name='Рассылка на почту', default=False, blank=True)
+
     last_name = models.CharField(verbose_name='Фамилия', max_length=128)
     first_name = models.CharField(verbose_name='Имя', max_length=128)
     middle_name = models.CharField(verbose_name='Отчество', max_length=128, blank=True, null=True)
     phone = models.CharField(verbose_name='Телефон', max_length=32, blank=True, null=True)
     email = models.CharField(verbose_name='Почта', max_length=128, unique=True)
+
     join_date = models.DateTimeField(verbose_name='Дата первого входа', blank=True, null=True)
     create_date = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True, blank=True, editable=False)
 

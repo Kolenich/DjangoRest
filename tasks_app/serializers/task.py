@@ -53,16 +53,18 @@ class AssignedTaskSerializer(TaskSerializer):
 
         assigned_to_user: User = validated_data['assigned_to']
 
-        email = User.objects.get(pk=assigned_to_user.pk).email
-        task = {
-            'summary': validated_data['summary'],
-            'description': validated_data['description'],
-            'dead_line': validated_data['dead_line'].strftime('%d.%m.%Y'),
-            'comment': validated_data['comment'],
-        }
-        assigned_by = f'{request.user.last_name} {request.user.first_name}'
+        # Если пользователь при регистрации поставил галочку "Рассылка на почту", то отправляем письмо
+        if assigned_to_user.mailing:
+            email = User.objects.get(pk=assigned_to_user.pk).email
+            task = {
+                'summary': validated_data['summary'],
+                'description': validated_data['description'],
+                'dead_line': validated_data['dead_line'].strftime('%d.%m.%Y'),
+                'comment': validated_data['comment'],
+            }
+            assigned_by = f'{request.user.last_name} {request.user.first_name}'
 
-        task_assigned_notification.delay(email, task, assigned_by)
+            task_assigned_notification.delay(email, task, assigned_by)
 
         return instance
 
