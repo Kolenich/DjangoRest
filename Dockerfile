@@ -1,4 +1,4 @@
-FROM python:3.7.3-slim
+FROM python:3.7-slim-stretch
 
 LABEL maintainer='nick.zhigalin@gmail.com'
 
