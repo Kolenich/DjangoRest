@@ -4,21 +4,9 @@ import uuid
 
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
-from django.contrib.auth.signals import user_logged_in
 from django.db import models
-from django.utils import timezone
 
 from .managers import UserManager
-
-
-def save_join_date(sender, user, **kwargs):
-    """Дергается по сигналу входа пользователя, если это первый вход юзера, то фиксируется в бд."""
-    if user.join_date is None:
-        user.join_date = timezone.now()
-        user.save(update_fields=['join_date'])
-
-
-user_logged_in.connect(save_join_date)
 
 
 class User(AbstractBaseUser, PermissionsMixin):

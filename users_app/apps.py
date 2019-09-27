@@ -1,9 +1,15 @@
-"""Файл конфигурации приложения Django."""
+"""Файл конфигурации приложения UsersApp."""
 
 from django.apps import AppConfig
 
 
-class AuthApiConfig(AppConfig):
-    """Класс конфигурации приложения AuthAPI в Django."""
+class UsersApp(AppConfig):
+    """Класс конфигурации приложения UsersApp в Django."""
 
     name = 'users_app'
+    verbose_name = 'Данные о пользователях'
+
+    def ready(self):
+        """Функция, выполняемая после запуска приложения. Делает импорт сигналов для моделей."""
+        # noinspection PyUnresolvedReferences
+        from users_app import signals  # noqa F401
