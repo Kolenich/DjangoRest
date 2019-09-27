@@ -32,7 +32,7 @@ class TaskDetailViewSet(TaskViewSet):
         """
         instance = self.get_object()
         # Достаем все задачи, которые есть у пользователя
-        user_tasks = Task.objects.filter(assigned_to=request.user)
+        user_tasks = request.user.tasks_taken.all()
         # Если запрашиваемая задача есть у пользователя, возвращаем её
         if instance in user_tasks:
             serializer = self.get_serializer(instance)
