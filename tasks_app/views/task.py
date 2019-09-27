@@ -2,6 +2,7 @@
 
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.status import HTTP_403_FORBIDDEN
 
 from tasks_app.models import Task
 from tasks_app.serializers import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer
@@ -19,6 +20,27 @@ class TaskDetailViewSet(TaskViewSet):
     """ViewSet модели Task для отображения деталей задания."""
 
     serializer_class = TaskDetailSerializer
+
+    def retrieve(self, request: Request, *args, **kwargs):
+        """
+        Переопределение метода выдачи одной записи в БД.
+
+        :param request: объект запроса
+        :param args: параметры массива
+        :param kwargs: параметры словаря
+        :return: 200 и найденный объект, 404 и сообщение об отсутствии или 403
+        """
+        instance = self.get_object()
+        # Достаем все задачи, которые есть у пользователя
+        user_tasks = Task.objects.filter(assigned_to=request.user)
+        # Если запрашиваемая задача есть у пользователя, возвращаем её
+        if instance in user_tasks:
+            serializer = self.get_serializer(instance)
+            return Response(serializer.data)
+        # Иначе возвращаем 403
+        else:
+            data = {'message': 'У вас нет доступа к этому заданию'}
+            return Response(data, HTTP_403_FORBIDDEN)
 
 
 class AssignedTaskViewSet(TaskViewSet):

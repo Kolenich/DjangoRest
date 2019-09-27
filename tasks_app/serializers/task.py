@@ -36,7 +36,7 @@ class TaskDetailSerializer(TaskSerializer):
 class AssignedTaskSerializer(TaskSerializer):
     """Сериалайзер модели Task для назначения задачи."""
 
-    assigned_by = serializers.PrimaryKeyRelatedField(required=False, read_only=True)
+    assigned_by = serializers.PrimaryKeyRelatedField(read_only=True)
 
     def create(self, validated_data: dict) -> Task:
         """
@@ -47,7 +47,7 @@ class AssignedTaskSerializer(TaskSerializer):
         """
         request: Request = self.context['request']
 
-        validated_data['assigned_by_id'] = request.user.id
+        validated_data['assigned_by'] = request.user
 
         instance = Task.objects.create(**validated_data)
 
