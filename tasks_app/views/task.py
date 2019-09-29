@@ -77,9 +77,7 @@ class TaskTableViewset(TaskViewSet):
         :param kwargs: дополнительные параметры словарем
         :return: отфильтрованный кверисет
         """
-        user_id = request.user.id
-
-        queryset = self.get_queryset().filter(assigned_to_id=user_id, archived=False)
+        queryset = self.get_queryset().filter(assigned_to=request.user, archived=False)
 
         response = self.custom_list(queryset)
 
