@@ -79,6 +79,6 @@ class TaskTableViewset(TaskViewSet):
         """
         queryset = self.get_queryset().filter(assigned_to=request.user, archived=False)
 
-        response = self.custom_list(queryset)
+        response = self.get_paginated_list(queryset)
 
         return response

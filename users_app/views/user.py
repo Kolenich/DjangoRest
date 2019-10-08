@@ -64,7 +64,7 @@ class UserAssignmentViewset(UserViewSet):
         """
         queryset = self.get_queryset().exclude(id=request.user.id)
 
-        response = self.custom_list(queryset)
+        response = self.get_paginated_list(queryset)
 
         return response
 

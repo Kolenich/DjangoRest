@@ -1,8 +1,13 @@
-"""Файл для регистрации моделей в админке."""
+"""Файл админки Приложения UsersApp."""
 
+from django.apps import apps
 from django.contrib import admin
-
-from users_app.models import User
+from django.contrib.admin.sites import AlreadyRegistered
 
 # Register your models here.
-admin.site.register(User)
+app_models = apps.get_app_config('users_app').get_models()
+for model in app_models:
+    try:
+        admin.site.register(model)
+    except AlreadyRegistered:
+        pass

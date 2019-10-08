@@ -8,9 +8,9 @@ from rest_framework.response import Response
 class CustomModelViewSet(viewsets.ModelViewSet):
     """Класс-примесь для ModelViewset."""
 
-    def custom_list(self, queryset: QuerySet) -> Response:
+    def get_paginated_list(self, queryset: QuerySet) -> Response:
         """
-        Кастомный метод отдачи данных на основании переданного кверисета.
+        Общий метод отдачи данных на основании переданного кверисета.
 
         :param queryset: кверисет
         :return: объект ответа с обработанными данными
