@@ -159,7 +159,7 @@ CELERY_TIMEZONE = TIME_ZONE
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
 EMAIL_HOST_USER = 'nick.zhigalin@gmail.com'
-EMAIL_HOST_PASSWORD = 'qpmpjnobbrdkfxrp'
+EMAIL_HOST_PASSWORD = 'uzeqmnmdsbsvxfmy'
 EMAIL_USE_SSL = True
 
 # Настройка заголовков для отправки по электронной почте

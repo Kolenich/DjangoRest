@@ -1,5 +1,7 @@
 """Файл с задачами для Celery."""
 
+from __future__ import absolute_import, unicode_literals
+
 from celery import shared_task
 from django.conf import settings
 from django.core.mail import EmailMessage
@@ -10,7 +12,7 @@ from tools.email_messages import greetings_body
 @shared_task
 def task_assigned_notification(email: str, task: dict, assigned_by: str):
     """
-    Задача для отпаравки писем приветствия.
+    Задача для отправки писем оповещения о назначении задания.
 
     :param email: электронная почта
     :param task: объект задачи
