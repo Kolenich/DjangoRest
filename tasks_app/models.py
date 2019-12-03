@@ -24,6 +24,9 @@ class Task(models.Model):
     assigned_to = models.ForeignKey(to='users_app.User', verbose_name='Кому назначено', on_delete=models.CASCADE,
                                     related_name='tasks_taken')
 
+    attachment = models.OneToOneField('common_models_app.Attachment', models.CASCADE, verbose_name='Вложение к заданию',
+                                      null=True, blank=True, related_name='task')
+
     class Meta:
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'

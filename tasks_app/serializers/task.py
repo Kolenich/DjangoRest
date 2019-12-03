@@ -3,6 +3,7 @@
 from rest_framework import serializers
 from rest_framework.request import Request
 
+from common_models_app.serializers import AttachmentSerializer
 from tasks_app.models import Task
 from tasks_app.tasks import task_assigned_notification
 from users_app.models import User
@@ -27,16 +28,18 @@ class TaskDetailSerializer(TaskSerializer):
     """Сериалайзер модели Task для отображения деталей задания."""
 
     assigned_by = UserTaskDetailSerializer(many=False, required=False)
+    attachment = AttachmentSerializer(many=False, read_only=True)
 
     class Meta(TaskMeta):
         fields = None
-        exclude = ('assigned_to',)
+        exclude = ['assigned_to']
 
 
 class AssignedTaskSerializer(TaskSerializer):
     """Сериалайзер модели Task для назначения задачи."""
 
     assigned_by = serializers.PrimaryKeyRelatedField(read_only=True)
+    attachment = AttachmentSerializer(many=False, write_only=True, allow_null=True)
 
     def create(self, validated_data: dict) -> Task:
         """
@@ -72,10 +75,11 @@ class TaskTableSerializer(TaskSerializer):
     """Табличное представление для модели Task."""
 
     assigned_by = serializers.SerializerMethodField()
+    attachment = AttachmentSerializer(many=False, read_only=True)
 
     class Meta(TaskMeta):
         fields = None
-        exclude = ('done',)
+        exclude = ['done']
 
     @staticmethod
     def get_assigned_by(instance: Task) -> str:
