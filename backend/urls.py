@@ -23,6 +23,7 @@ urlpatterns = [
     path('auth/', include('rest_auth.urls')),
     path('users_api/', include('users_app.urls')),
     path('tasks_api/', include('tasks_app.urls')),
+    path('common_models_api/', include('common_models_app.urls')),
 ]
 
 if settings.DEBUG:

@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django_filters',
     'users_app',
     'tasks_app',
+    'common_models_app'
 ]
 
 MIDDLEWARE = [
