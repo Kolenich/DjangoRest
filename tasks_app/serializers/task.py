@@ -27,7 +27,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class TaskDetailSerializer(TaskSerializer):
     """Сериалайзер модели Task для отображения деталей задания."""
 
-    assigned_by = UserTaskDetailSerializer(many=False, required=False)
+    assigned_by = UserTaskDetailSerializer(many=False, read_only=True)
     attachment = AttachmentSerializer(many=False, read_only=True)
 
     class Meta(TaskMeta):

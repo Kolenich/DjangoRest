@@ -8,7 +8,7 @@ class Attachment(models.Model):
 
     file = models.FileField('Файл', upload_to='attachments')
     file_name = models.CharField('Имя файла', max_length=64)
-    file_mime = models.CharField('Тип файла', max_length=16)
+    file_mime = models.CharField('Тип файла', max_length=128)
     file_size = models.PositiveIntegerField('Размер файла')
 
     class Meta:
