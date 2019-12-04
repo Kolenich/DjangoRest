@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django_filters',
     'users_app',
     'tasks_app',
-    'common_models_app'
+    'common_models_app',
+    'backend.custom_commands'
 ]
 
 MIDDLEWARE = [
