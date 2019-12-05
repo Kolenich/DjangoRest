@@ -17,10 +17,15 @@ class Command(BaseCommand):
 
     help = 'Resets current docker database'
 
+    AVAILABLE_ARGUMENTS = [
+        ('-r', '--root')
+    ]
+
     def add_arguments(self, parser):
         """Метод для добавления аргументов команде."""
-        parser.add_argument('-r', '--root', action='store_true', default=False,
-                            help='Container name as projects upper root directory name')
+        for argument in self.AVAILABLE_ARGUMENTS:
+            parser.add_argument(*argument, action='store_true', default=False,
+                                help='Container name as projects upper root directory name')
 
     def handle(self, *args, **options):
         """Метод, отвечающий за вызов команды."""
