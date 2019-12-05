@@ -4,9 +4,9 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_403_FORBIDDEN
 
+from mixins import CustomModelViewSet
 from tasks_app.models import Task
 from tasks_app.serializers import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer
-from tools import CustomModelViewSet
 
 
 class TaskViewSet(CustomModelViewSet):

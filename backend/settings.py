@@ -12,19 +12,23 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from tools import cut_protocol, get_config_from_file
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+config = get_config_from_file(os.path.join(BASE_DIR, 'settings.yml'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'm&1nf4=*jej2g77i(j)oi#$=of4llu*gl62$6)+=on%9kqw_i_'
+SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config['DEBUG']
 
-ALLOWED_HOSTS = ['vps706754.ovh.net']
+ALLOWED_HOSTS = [cut_protocol(x) for x in config['ALLOWED_HOSTS']]
 
 # Application definition
 
@@ -43,7 +47,7 @@ INSTALLED_APPS = [
     'users_app',
     'tasks_app',
     'common_models_app',
-    'backend.custom_commands'
+    'custom_commands'
 ]
 
 MIDDLEWARE = [
@@ -83,10 +87,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres',
-        'USER': 'nikolay',
-        'PASSWORD': 'Crowel_16',
-        'HOST': 'postgres',
+        **config['DATABASE'],
     }
 }
 
@@ -126,7 +127,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Настроки CORS
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = ['https://vps706754.ovh.net']
+CORS_ORIGIN_WHITELIST = config['ALLOWED_HOSTS']
 
 # Настройки SSL
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -152,14 +153,15 @@ REST_FRAMEWORK = {
 }
 
 # Настройка Celery
-CELERY_BROKER_URL = 'amqp://kolenich:Crowel_16@rabbitmq:5672/kolenich-host'
+CELERY_BROKER_URL = f'amqp://{config["CELERY"]["USER"]}:{config["CELERY"]["PASSWORD"]}@rabbitmq:5672/' \
+                    f'{config["CELERY"]["HOST"]}'
 CELERY_TIMEZONE = TIME_ZONE
 
 # Настройка почты для рассылки
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'nick.zhigalin@gmail.com'
-EMAIL_HOST_PASSWORD = 'uzeqmnmdsbsvxfmy'
+EMAIL_HOST_USER = config["EMAIL"]["USER"]
+EMAIL_HOST_PASSWORD = config["EMAIL"]["PASSWORD"]
 EMAIL_USE_SSL = True
 
 # Настройка заголовков для отправки по электронной почте

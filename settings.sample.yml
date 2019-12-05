@@ -1,0 +1,20 @@
+SECRET_KEY: test
+
+DEBUG: true
+
+ALLOWED_HOSTS:
+  - http://test.com
+
+DATABASE:
+  NAME: test
+  USER: test
+  PASSWORD: test
+
+CELERY:
+  USER: test
+  PASSWORD: test
+  HOST: test
+
+EMAIL:
+  USER: test
+  PASSWORD: test
