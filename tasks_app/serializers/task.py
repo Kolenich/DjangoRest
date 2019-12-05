@@ -3,6 +3,7 @@
 from rest_framework import serializers
 from rest_framework.request import Request
 
+from common_models_app.models import Attachment
 from common_models_app.serializers import AttachmentSerializer
 from tasks_app.models import Task
 from tasks_app.tasks import task_assigned_notification
@@ -51,6 +52,12 @@ class AssignedTaskSerializer(TaskSerializer):
         request: Request = self.context['request']
 
         validated_data['assigned_by'] = request.user
+
+        attachment = validated_data.pop('attachment')
+
+        attachment = Attachment.objects.create(**attachment)
+
+        validated_data['attachment'] = attachment
 
         instance = Task.objects.create(**validated_data)
 
