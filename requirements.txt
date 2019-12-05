@@ -25,10 +25,8 @@ psycopg2-binary==2.8.4
 pycodestyle==2.5.0
 pydocstyle==4.0.1
 pyflakes==2.1.1
-pypiwin32==223
 python-dateutil==2.8.1
 pytz==2019.3
-pywin32==227
 requests==2.22.0
 six==1.13.0
 snowballstemmer==2.0.0
