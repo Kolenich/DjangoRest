@@ -1,12 +1,15 @@
 """ViewSet'ы для модели Task."""
 
+from rest_framework.decorators import action
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework.status import HTTP_403_FORBIDDEN
+from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_500_INTERNAL_SERVER_ERROR
 
+from common_models_app.models import Attachment
 from mixins import CustomModelViewSet
 from tasks_app.models import Task
 from tasks_app.serializers import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer
+from tasks_app.tasks import task_assigned_notification
 
 
 class TaskViewSet(CustomModelViewSet):
@@ -47,6 +50,45 @@ class AssignedTaskViewSet(TaskViewSet):
     """ViewSet для сохранения задач в БД."""
 
     serializer_class = AssignedTaskSerializer
+
+    @action(methods=['post'], detail=True, url_path='attach-file')
+    def attach_file(self, request: Request, pk=None) -> Response:
+        """Экшн для прикладывания файла к заданию."""
+        data = {'message': 'Некорректный запрос'}
+        status = HTTP_400_BAD_REQUEST
+
+        task = self.get_queryset().get(pk=pk)
+
+        try:
+            attachment = {
+                'file': request.data.get('file'),
+                'file_name': request.data.get('file_name'),
+                'file_mime': request.data.get('file_mime'),
+                'file_size': int(request.data.get('file_size'))
+            }
+            task.attachment = Attachment.objects.create(**attachment)
+            task.save()
+
+            # Если пользователь при регистрации поставил галочку "Рассылка на почту", то отправляем письмо
+            if task.assigned_to.mailing:
+                task_object = {
+                    'summary': task.summary,
+                    'description': task.description,
+                    'dead_line': task.dead_line.strftime('%d.%m.%Y'),
+                    'comment': task.comment,
+                }
+                assigned_by = f'{request.user.last_name} {request.user.first_name}'
+
+                task_assigned_notification.delay(task.assigned_to.email, task_object, assigned_by)
+
+            data = self.get_serializer(task).data
+            status = HTTP_200_OK
+        except Exception as exc:
+            task.delete()
+            data['message'] = f'При создании произошла ошибка: {str(exc)}'
+            status = HTTP_500_INTERNAL_SERVER_ERROR
+
+        return Response(data, status)
 
 
 class TaskTableViewset(TaskViewSet):
