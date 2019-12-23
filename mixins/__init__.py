@@ -1,1 +1,1 @@
-from .viewsets import CustomModelViewSet
+from .viewsets import ModelViewSet

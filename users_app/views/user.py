@@ -7,12 +7,12 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
-from mixins import CustomModelViewSet
+from mixins import ModelViewSet
 from users_app.models import User
 from users_app.serializers import UserAssignmentSerializer, UserProfileSerializer, UserSerializer
 
 
-class UserViewSet(CustomModelViewSet):
+class UserViewSet(ModelViewSet):
     """Базовый viewset для модели Пользователя."""
 
     queryset = User.objects.all()

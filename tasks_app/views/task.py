@@ -6,13 +6,13 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_500_INTERNAL_SERVER_ERROR
 
 from common_models_app.models import Attachment
-from mixins import CustomModelViewSet
+from mixins import ModelViewSet
 from tasks_app.models import Task
 from tasks_app.serializers import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer
 from tasks_app.tasks import task_assigned_notification
 
 
-class TaskViewSet(CustomModelViewSet):
+class TaskViewSet(ModelViewSet):
     """Базовый viewset для модели Tasks."""
 
     queryset = Task.objects.all()
