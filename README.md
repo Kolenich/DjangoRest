@@ -1,10 +1,4 @@
 # Django Backend
-## `flake8`
-Install all he necessary dependencies using
-```bash
-pip install -r flake8.txt
-```
-
 ## `dependencies`
 Create and activate virtual environment
 ```bash
