@@ -153,7 +153,7 @@ REST_FRAMEWORK = {
 }
 
 # Настройка Celery
-CELERY_BROKER_URL = f'amqp://{config["CELERY"]["USER"]}:{config["CELERY"]["PASSWORD"]}@rabbitmq:5672/' \
+CELERY_BROKER_URL = f'amqp://{config["CELERY"]["USER"]}:{config["CELERY"]["PASSWORD"]}@kolenich-rabbitmq:5672/' \
                     f'{config["CELERY"]["HOST"]}'
 CELERY_TIMEZONE = TIME_ZONE
 
