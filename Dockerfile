@@ -6,8 +6,7 @@ WORKDIR /app
 
 EXPOSE 8000
 
-RUN pip install --upgrade pip \
- && pip install gunicorn
+RUN pip install --upgrade pip gunicorn
 
 COPY requirements.txt /app/
 
@@ -19,4 +18,4 @@ ENTRYPOINT mkdir -p pids logs \
         && python manage.py migrate \
         && python manage.py collectstatic --noinput \
         && celery multi start worker -A backend --pidfile="pids/celery.pid" --logfile="logs/celery.log" \
-        && gunicorn backend.wsgi -b 0.0.0.0:8000 -p pids/gunicorn.pid --access-logfile logs/gunicorn-access.log --log-file logs/gunicorn.log
+        && gunicorn backend.wsgi -b 0.0.0.0 -p pids/gunicorn.pid --access-logfile logs/gunicorn-access.log --log-file logs/gunicorn.log
