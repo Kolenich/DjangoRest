@@ -93,7 +93,7 @@ class UserViewSet(ModelViewSet):
             is_superuser=False,
             is_staff=False,
             is_active=True,
-            # pk__ne=request.user.pk
+            pk__ne=request.user.pk
         )
 
         serializer = UserAssignmentSerializer(queryset, many=True)
