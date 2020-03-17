@@ -9,6 +9,8 @@ from django.core.management.base import BaseCommand
 from docker.errors import NotFound
 from docker.models.containers import Container
 
+from lib.functions import split_path
+
 client = docker.from_env()
 
 
@@ -32,11 +34,11 @@ class Command(BaseCommand):
         database = settings.DATABASES['default']
         root = options.get('root', False)
         if root is True:
-            container_name = settings.BASE_DIR.split('/')[-2]
+            container_name = split_path(settings.BASE_DIR)[-2]
         else:
             container_name = input('Enter container name to search for reset: ')
 
-        if database['ENGINE'] == 'django.db.backends.postgresql_psycopg2':
+        if 'postgresql' in database['ENGINE']:
             try:
                 container: Container = client.containers.get(container_name)
                 print('Killing existing container...')
