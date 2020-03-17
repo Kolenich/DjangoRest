@@ -2,13 +2,11 @@
 
 from rest_framework.routers import DefaultRouter
 
-from tasks_app.views import AssignedTaskViewSet, TaskDetailViewSet, TaskTableViewset, TaskViewSet
+from tasks_app.views import TaskTableViewset, TaskViewSet
 
 ROUTER = DefaultRouter()
 
 ROUTER.register(r'task', TaskViewSet)
-ROUTER.register(r'task-detail', TaskDetailViewSet)
 ROUTER.register(r'task-table', TaskTableViewset)
-ROUTER.register(r'assign-task', AssignedTaskViewSet)
 
 urlpatterns = ROUTER.urls

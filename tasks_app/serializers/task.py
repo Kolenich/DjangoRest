@@ -1,7 +1,6 @@
 """Сериалайзеры модели Task."""
 
 from rest_framework import serializers
-from rest_framework.request import Request
 
 from common_models_app.serializers import AttachmentSerializer
 from tasks_app.models import Task
@@ -31,28 +30,6 @@ class TaskDetailSerializer(TaskSerializer):
     class Meta(TaskMeta):
         fields = None
         exclude = ['assigned_to']
-
-
-class AssignedTaskSerializer(TaskSerializer):
-    """Сериалайзер модели Task для назначения задачи."""
-
-    assigned_by = serializers.PrimaryKeyRelatedField(read_only=True)
-    attachment = AttachmentSerializer(many=False, required=False)
-
-    def create(self, validated_data: dict) -> Task:
-        """
-        Переопределение метода создания задачи.
-
-        :param validated_data:
-        :return: объект созданной задачи
-        """
-        request: Request = self.context['request']
-
-        validated_data['assigned_by'] = request.user
-
-        instance = Task.objects.create(**validated_data)
-
-        return instance
 
 
 class TaskTableSerializer(TaskSerializer):

@@ -1,1 +1,1 @@
-from .task import AssignedTaskViewSet, TaskDetailViewSet, TaskTableViewset, TaskViewSet
+from .task import TaskTableViewset, TaskViewSet

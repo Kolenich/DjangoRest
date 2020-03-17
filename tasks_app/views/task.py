@@ -6,9 +6,9 @@ from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FORBIDDEN, HTTP_500_INTERNAL_SERVER_ERROR
 
 from common_models_app.models import Attachment
-from mixins import ModelViewSet
+from lib.mixins import ModelViewSet
 from tasks_app.models import Task
-from tasks_app.serializers import AssignedTaskSerializer, TaskDetailSerializer, TaskSerializer, TaskTableSerializer
+from tasks_app.serializers import TaskDetailSerializer, TaskSerializer, TaskTableSerializer
 from tasks_app.tasks import task_assigned_notification
 
 
@@ -18,19 +18,13 @@ class TaskViewSet(ModelViewSet):
     queryset = Task.objects.all()
     serializer_class = TaskSerializer
 
-
-class TaskDetailViewSet(TaskViewSet):
-    """ViewSet модели Task для отображения деталей задания."""
-
-    serializer_class = TaskDetailSerializer
-
-    def retrieve(self, request: Request, *args, **kwargs):
+    @action(methods=['get'], detail=True, url_path='detail')
+    def task_detail(self, request: Request, pk=None):
         """
-        Переопределение метода выдачи одной записи в БД.
+        Метода выдачи одной записи в БД.
 
         :param request: объект запроса
-        :param args: параметры массива
-        :param kwargs: параметры словаря
+        :param pk PK объекта
         :return: 200 и найденный объект, 404 и сообщение об отсутствии или 403
         """
         instance = self.get_object()
@@ -38,26 +32,38 @@ class TaskDetailViewSet(TaskViewSet):
         user_tasks = request.user.tasks_taken.all()
         # Если запрашиваемая задача есть у пользователя, возвращаем её
         if instance in user_tasks:
-            serializer = self.get_serializer(instance)
-            return Response(serializer.data)
+            serializer = TaskDetailSerializer(instance)
+            return Response(serializer.data, HTTP_200_OK)
         # Иначе возвращаем 403
         else:
-            data = {'message': 'У вас нет доступа к этому заданию'}
+            data = {'detail': 'У вас нет доступа к этому заданию'}
             return Response(data, HTTP_403_FORBIDDEN)
 
+    @action(methods=['post'], detail=False)
+    def assign(self, request: Request):
+        """
+        Экшн для создания Задачи в БД.
 
-class AssignedTaskViewSet(TaskViewSet):
-    """ViewSet для сохранения задач в БД."""
+        :param request: объект запроса
+        :return: созданная задача
+        """
+        data = {'assigned_by': request.user.pk, **request.data}
 
-    serializer_class = AssignedTaskSerializer
+        serializer = self.get_serializer(data=data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, HTTP_200_OK)
+
+        return Response(serializer.errors, HTTP_400_BAD_REQUEST)
 
     @action(methods=['post'], detail=True, url_path='attach-file')
     def attach_file(self, request: Request, pk=None) -> Response:
         """Экшн для прикладывания файла к заданию."""
-        data = {'message': 'Некорректный запрос'}
+        data = {'detail': 'Некорректный запрос'}
         status = HTTP_400_BAD_REQUEST
 
-        task = self.get_queryset().get(pk=pk)
+        task = self.get_object()
 
         try:
             attachment = {
@@ -85,7 +91,7 @@ class AssignedTaskViewSet(TaskViewSet):
             status = HTTP_200_OK
         except Exception as exc:
             task.delete()
-            data['message'] = f'При создании произошла ошибка: {str(exc)}'
+            data['detail'] = f'При создании произошла ошибка: {str(exc)}'
             status = HTTP_500_INTERNAL_SERVER_ERROR
 
         return Response(data, status)
@@ -97,12 +103,12 @@ class TaskTableViewset(TaskViewSet):
     serializer_class = TaskTableSerializer
 
     filterset_fields = {
-        'summary': ('icontains', 'istartswith', 'iendswith', 'exact',),
-        'description': ('icontains', 'istartswith', 'iendswith', 'exact'),
-        'comment': ('icontains', 'istartswith', 'iendswith', 'exact'),
-        'date_of_issue': ('gte', 'gt', 'lte', 'lt'),
-        'dead_line': ('gte', 'gt', 'lte', 'lt'),
-        'done': ('exact',),
+        'summary': ('icontains', 'istartswith', 'iendswith', 'exact', 'ne'),
+        'description': ('icontains', 'istartswith', 'iendswith', 'exact', 'ne'),
+        'comment': ('icontains', 'istartswith', 'iendswith', 'exact', 'ne'),
+        'date_of_issue': ('gte', 'gt', 'lte', 'lt', 'ne'),
+        'dead_line': ('gte', 'gt', 'lte', 'lt', 'ne'),
+        'done': ('exact', 'ne'),
         'assigned_by_id': ('exact',),
         'assigned_to_id': ('exact',),
     }

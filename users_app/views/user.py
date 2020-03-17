@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
-from mixins import ModelViewSet
+from lib.mixins import ModelViewSet
 from users_app.models import User
 from users_app.serializers import UserAssignmentSerializer, UserProfileSerializer, UserSerializer
 
@@ -18,15 +18,51 @@ class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @action(methods=['post'], detail=False, permission_classes=[AllowAny])
+    def registrate(self, request: Request) -> Response:
+        """
+        Экшн для регистрации новых пользователей.
 
-class UserProfileViewSet(UserViewSet):
-    """ViewSet для выгрущки данных о пользователе в уголовое меню."""
+        :param request: объект запроса
+        :return: 201 или 400
+        """
+        data = {'detail': 'Неверные данные'}
 
-    queryset = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
-    serializer_class = UserProfileSerializer
+        try:
+            if request.data['first_name'] == '':
+                data['detail'] = 'Имя не может быть пустым'
+                data['errors'] = {'first_name': True}
+                return Response(data, HTTP_400_BAD_REQUEST)
+
+            if request.data['last_name'] == '':
+                data['detail'] = 'Фамилия не может быть пустой'
+                data['errors'] = {'last_name': True}
+                return Response(data, HTTP_400_BAD_REQUEST)
+
+            if request.data['password'] == '':
+                data['detail'] = 'Необходимо указать пароль'
+                data['errors'] = {'password': True}
+                return Response(data, HTTP_400_BAD_REQUEST)
+        except KeyError:
+            return Response(data, HTTP_400_BAD_REQUEST)
+
+        try:
+            User.objects.create_user(**request.data)
+            data['detail'] = 'Пользователь создан успешно'
+            response = Response(data, HTTP_201_CREATED)
+        except IntegrityError:
+            data['detail'] = 'Пользователь с данной почтой уже существует'
+            data['errors'] = {'email': True}
+            response = Response(data, HTTP_400_BAD_REQUEST)
+        except ValueError:
+            data['detail'] = 'Необходимо указать электронную почту'
+            data['errors'] = {'email': True}
+            response = Response(data, HTTP_400_BAD_REQUEST)
+
+        return response
 
     @action(methods=['get'], detail=False)
-    def user(self, request: Request):
+    def profile(self, request: Request):
         """
         Метод для получения данных о конкретном юзере.
 
@@ -36,84 +72,30 @@ class UserProfileViewSet(UserViewSet):
         try:
             user = self.get_queryset().get(email=request.user.email)
 
-            serializer = self.get_serializer(user)
+            serializer = UserProfileSerializer(user)
 
             return Response(serializer.data, HTTP_200_OK)
         except User.DoesNotExist:
-            data = {'message': 'Указанный пользователь не найден'}
+            data = {'detail': 'Указанный пользователь не найден'}
 
             return Response(data, HTTP_404_NOT_FOUND)
 
-
-class UserAssignmentViewset(UserViewSet):
-    """Viewset для выгрузки всех юзеров для отображения в строке фильтрации для таблицы задач."""
-
-    queryset = User.objects.filter(is_superuser=False, is_staff=False, is_active=True)
-    serializer_class = UserAssignmentSerializer
-
-    def list(self, request: Request, *args, **kwargs) -> Response:
+    @action(methods=['get'], detail=False)
+    def assigner(self, request: Request):
         """
-        Переопределение метода выдачи пользователей для фильтрации по заказчику.
-
+        Метод выдачи пользователей для фильтрации по заказчику.
         Ислючает из списка пользователя, сделавшего запрос.
 
         :param request: объект запроса
-        :param args: дополнительные параметры списом
-        :param kwargs: дополнительные параметры словарем
         :return: отфильтрованный кверисет
         """
-        queryset = self.get_queryset().exclude(id=request.user.id)
+        queryset = self.get_queryset().filter(
+            is_superuser=False,
+            is_staff=False,
+            is_active=True,
+            # pk__ne=request.user.pk
+        )
 
-        response = self.get_paginated_list(queryset)
+        serializer = UserAssignmentSerializer(queryset, many=True)
 
-        return response
-
-
-class UserRegistrationViewSet(UserViewSet):
-    """Класс для регистрации пользователей."""
-
-    permission_classes = (AllowAny,)
-
-    @action(methods=['post'], detail=False)
-    def registrate(self, request: Request) -> Response:
-        """
-        Экшн для регистрации новых пользователей.
-
-        :param request: объект запроса
-        :return: 201 или 400
-        """
-        data = {'message': 'Неверные данные'}
-        response = Response(data, HTTP_400_BAD_REQUEST)
-
-        try:
-            if request.data['first_name'] == '':
-                data['message'] = 'Имя не может быть пустым'
-                data['errors'] = {'first_name': True}
-                return Response(data, HTTP_400_BAD_REQUEST)
-
-            if request.data['last_name'] == '':
-                data['message'] = 'Фамилия не может быть пустой'
-                data['errors'] = {'last_name': True}
-                return Response(data, HTTP_400_BAD_REQUEST)
-
-            if request.data['password'] == '':
-                data['message'] = 'Необходимо указать пароль'
-                data['errors'] = {'password': True}
-                return Response(data, HTTP_400_BAD_REQUEST)
-        except KeyError:
-            return response
-
-        try:
-            User.objects.create_user(**request.data)
-            data['message'] = 'Пользователь создан успешно'
-            response = Response(data, HTTP_201_CREATED)
-        except IntegrityError:
-            data['message'] = 'Пользователь с данной почтой уже существует'
-            data['errors'] = {'email': True}
-            response = Response(data, HTTP_400_BAD_REQUEST)
-        except ValueError:
-            data['message'] = 'Необходимо указать электронную почту'
-            data['errors'] = {'email': True}
-            response = Response(data, HTTP_400_BAD_REQUEST)
-
-        return response
+        return Response(serializer.data, HTTP_200_OK)
