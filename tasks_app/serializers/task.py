@@ -4,7 +4,7 @@ from rest_framework import serializers
 
 from common_models_app.serializers import AttachmentSerializer
 from tasks_app.models import Task
-from users_app.serializers import UserTaskDetailSerializer
+from users_app.serializers import ProfileTaskDetailSerializer
 
 
 class TaskMeta:
@@ -24,7 +24,7 @@ class TaskSerializer(serializers.ModelSerializer):
 class TaskDetailSerializer(TaskSerializer):
     """Сериалайзер модели Task для отображения деталей задания."""
 
-    assigned_by = UserTaskDetailSerializer(many=False, read_only=True)
+    assigned_by = ProfileTaskDetailSerializer(many=False, read_only=True)
     attachment = AttachmentSerializer(many=False, read_only=True)
 
     class Meta(TaskMeta):

@@ -19,9 +19,9 @@ class Task(models.Model):
     done = models.BooleanField(verbose_name='Выполнено', default=False)
     archived = models.BooleanField(verbose_name='В архиве', default=False)
 
-    assigned_by = models.ForeignKey(to='users_app.User', verbose_name='Кто назначил', on_delete=models.CASCADE,
+    assigned_by = models.ForeignKey(to='users_app.Profile', verbose_name='Кто назначил', on_delete=models.CASCADE,
                                     related_name='tasks_assigned')
-    assigned_to = models.ForeignKey(to='users_app.User', verbose_name='Кому назначено', on_delete=models.CASCADE,
+    assigned_to = models.ForeignKey(to='users_app.Profile', verbose_name='Кому назначено', on_delete=models.CASCADE,
                                     related_name='tasks_taken')
 
     attachment = models.OneToOneField('common_models_app.Attachment', models.CASCADE, verbose_name='Вложение к заданию',

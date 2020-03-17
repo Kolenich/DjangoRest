@@ -1,22 +1,23 @@
 """Файл с viewset'ами для модели User."""
 
+from django.contrib.auth.models import User
 from django.db.utils import IntegrityError
+from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
-from lib.mixins import ModelViewSet
-from users_app.models import User
-from users_app.serializers import UserAssignmentSerializer, UserProfileSerializer, UserSerializer
+from users_app.models import Profile
+from users_app.serializers import ProfileAssignmentSerializer, ProfileDetailSerializer, ProfileSerializer
 
 
-class UserViewSet(ModelViewSet):
+class ProfileViewSet(viewsets.ModelViewSet):
     """Базовый viewset для модели Пользователя."""
 
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
     @action(methods=['post'], detail=False, permission_classes=[AllowAny])
     def registrate(self, request: Request) -> Response:
@@ -28,18 +29,31 @@ class UserViewSet(ModelViewSet):
         """
         data = {'detail': 'Неверные данные'}
 
+        user_data = {
+            'first_name': request.data.pop('first_name', None),
+            'last_name': request.data.pop('last_name', None),
+            'password': request.data.pop('password', None),
+            'email': request.data.pop('email', None),
+            'username': request.data.pop('username', None),
+        }
+
+        profile_data = {
+            'mailing': request.data.pop('mailing', False),
+            'middle_name': request.data.pop('middle_name', False)
+        }
+
         try:
-            if request.data['first_name'] == '':
+            if not user_data['first_name']:
                 data['detail'] = 'Имя не может быть пустым'
                 data['errors'] = {'first_name': True}
                 return Response(data, HTTP_400_BAD_REQUEST)
 
-            if request.data['last_name'] == '':
+            if not user_data['last_name']:
                 data['detail'] = 'Фамилия не может быть пустой'
                 data['errors'] = {'last_name': True}
                 return Response(data, HTTP_400_BAD_REQUEST)
 
-            if request.data['password'] == '':
+            if not user_data['password']:
                 data['detail'] = 'Необходимо указать пароль'
                 data['errors'] = {'password': True}
                 return Response(data, HTTP_400_BAD_REQUEST)
@@ -47,7 +61,7 @@ class UserViewSet(ModelViewSet):
             return Response(data, HTTP_400_BAD_REQUEST)
 
         try:
-            User.objects.create_user(**request.data)
+            Profile.objects.create(user=User.objects.create_user(**user_data), **profile_data)
             data['detail'] = 'Пользователь создан успешно'
             response = Response(data, HTTP_201_CREATED)
         except IntegrityError:
@@ -61,8 +75,8 @@ class UserViewSet(ModelViewSet):
 
         return response
 
-    @action(methods=['get'], detail=False)
-    def profile(self, request: Request):
+    @action(methods=['get'], detail=False, url_path='detail')
+    def profile_detail(self, request: Request):
         """
         Метод для получения данных о конкретном юзере.
 
@@ -70,9 +84,9 @@ class UserViewSet(ModelViewSet):
         :return: объект ответа с данными о юзере
         """
         try:
-            user = self.get_queryset().get(email=request.user.email)
+            profile = self.get_queryset().get(user=User.objects.get(username=request.user.username))
 
-            serializer = UserProfileSerializer(user)
+            serializer = ProfileDetailSerializer(profile)
 
             return Response(serializer.data, HTTP_200_OK)
         except User.DoesNotExist:
@@ -90,12 +104,12 @@ class UserViewSet(ModelViewSet):
         :return: отфильтрованный кверисет
         """
         queryset = self.get_queryset().filter(
-            is_superuser=False,
-            is_staff=False,
-            is_active=True,
-            pk__ne=request.user.pk
+            user__is_superuser=False,
+            user__is_staff=False,
+            user__is_active=True,
+            user__pk__ne=request.user.pk
         )
 
-        serializer = UserAssignmentSerializer(queryset, many=True)
+        serializer = ProfileAssignmentSerializer(queryset, many=True)
 
         return Response(serializer.data, HTTP_200_OK)

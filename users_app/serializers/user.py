@@ -2,73 +2,105 @@
 
 from rest_framework import serializers
 
-from users_app.models import User
+from users_app.models import Profile
 
 
-class UserMeta:
-    """Базовый мета-класс для сериалайзеров модели User."""
+class ProfileMeta:
+    """Базовый мета-класс для сериалайзеров модели Profile."""
 
-    model = User
+    model = Profile
     fields = '__all__'
 
 
-class UserSerializer(serializers.ModelSerializer):
-    """Базовый сериалайзер модели User."""
+class ProfileSerializer(serializers.ModelSerializer):
+    """Базовый сериалайзер модели Profile."""
 
-    class Meta(UserMeta):
+    class Meta(ProfileMeta):
         pass
 
 
-class UserTaskDetailSerializer(UserSerializer):
-    """Сериалайзер модели User для отображения в подробностях задания."""
+class ProfileTaskDetailSerializer(ProfileSerializer):
+    """Сериалайзер модели Profile для отображения в подробностях задания."""
 
-    class Meta(UserMeta):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_first_name(instance: Profile):
+        """Метод для получения имени пользователя."""
+        return instance.user.first_name
+
+    @staticmethod
+    def get_last_name(instance: Profile):
+        """Метод для получения фамилии пользователя."""
+        return instance.user.last_name
+
+    class Meta(ProfileMeta):
         fields = ('first_name', 'last_name')
 
 
-class UserProfileSerializer(UserSerializer):
-    """Сериалайзер модели User для отображения в угловом меню."""
+class ProfileDetailSerializer(ProfileSerializer):
+    """Сериалайзер модели Profile для отображения в угловом меню."""
 
-    class Meta(UserMeta):
+    first_name = serializers.SerializerMethodField()
+    last_name = serializers.SerializerMethodField()
+    email = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_first_name(instance: Profile):
+        """Метод для получения имени пользователя."""
+        return instance.user.first_name
+
+    @staticmethod
+    def get_last_name(instance: Profile):
+        """Метод для получения фамилии пользователя."""
+        return instance.user.last_name
+
+    @staticmethod
+    def get_email(instance: Profile):
+        """Метод для получения фамилии пользователя."""
+        return instance.user.email
+
+    class Meta(ProfileMeta):
         fields = ('first_name', 'last_name', 'email')
 
 
-class UserAssignmentSerializer(UserSerializer):
+class ProfileAssignmentSerializer(ProfileSerializer):
     """Представление модели User для фльтрации в таблице задач."""
 
     value = serializers.SerializerMethodField(method_name='select_value')
     label = serializers.SerializerMethodField(method_name='select_label')
     key = serializers.SerializerMethodField(method_name='select_key')
 
-    class Meta(UserMeta):
+    class Meta(ProfileMeta):
         fields = ('key', 'value', 'label')
 
     @staticmethod
-    def select_value(instance: User) -> int:
+    def select_value(instance: Profile) -> int:
         """
         Метод для получения значения для селекта фильтрации в таблице задач.
 
         :param instance: объект модели User
         :return: первичный ключ модели
         """
-        return instance.id
+        return instance.user.pk
 
     @staticmethod
-    def select_label(instance: User) -> str:
+    def select_label(instance: Profile) -> str:
         """
         Метод для получения ярлыка для селекта фильтрации в таблице задач.
 
         :param instance: объект модели User
         :return: имя и фамилия пользователя
         """
-        return f'{instance.last_name} {instance.first_name}'
+        return f'{instance.user.last_name} {instance.user.first_name}'
 
     @staticmethod
-    def select_key(instance: User) -> int:
+    def select_key(instance: Profile) -> int:
         """
          Метод для получения ключа для селекта фильтрации в таблице задач.
 
         :param instance: объект модели User
         :return: первичный ключ модели
         """
-        return instance.id
+        return instance.user.pk

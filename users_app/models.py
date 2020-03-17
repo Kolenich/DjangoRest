@@ -1,41 +1,24 @@
 """Модели приложения users_app."""
 
-import uuid
-
 from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import PermissionsMixin, User
 from django.db import models
 
-from .managers import UserManager
 
+class Profile(models.Model):
+    """Модель Профиля пользователя."""
 
-class User(AbstractBaseUser, PermissionsMixin):
-    """Модель пользователя. Используется вместо стандартной джанговской модели."""
-
-    uid = models.UUIDField(verbose_name='UID пользователя', editable=False, unique=True, default=uuid.uuid4)
-
-    is_active = models.BooleanField(verbose_name='Пользователь активен', default=True, blank=True)
-    is_staff = models.BooleanField(verbose_name='Статус админа', default=False, blank=True)
-    is_superuser = models.BooleanField(verbose_name='Статус супер-админа', default=False, blank=True)
-    mailing = models.BooleanField(verbose_name='Рассылка на почту', default=False, blank=True)
-
-    last_name = models.CharField(verbose_name='Фамилия', max_length=128)
-    first_name = models.CharField(verbose_name='Имя', max_length=128)
+    user = models.OneToOneField(User, models.CASCADE, verbose_name='Пользователь')
+    avatar = models.OneToOneField('common_models_app.Attachment', models.SET_NULL, verbose_name='Аватар', null=True,
+                                  blank=True)
     middle_name = models.CharField(verbose_name='Отчество', max_length=128, blank=True, null=True)
     phone = models.CharField(verbose_name='Телефон', max_length=32, blank=True, null=True)
-    email = models.CharField(verbose_name='Почта', max_length=128, unique=True)
-
-    join_date = models.DateTimeField(verbose_name='Дата первого входа', blank=True, null=True)
-    create_date = models.DateTimeField(verbose_name='Дата создания', auto_now_add=True, blank=True, editable=False)
-
-    objects = UserManager()
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    mailing = models.BooleanField(verbose_name='Рассылка на почту', default=False, blank=True)
 
     class Meta:
-        verbose_name = 'Пользователь'
-        verbose_name_plural = 'Пользователи'
+        verbose_name = 'Профиль пользователя'
+        verbose_name_plural = 'Профили пользователей'
+        ordering = ('id',)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name} {self.email}'
+        return f'{self.user.last_name} {self.user.first_name}'
