@@ -8,28 +8,29 @@ from django.db import models
 class Task(models.Model):
     """Модель задания."""
 
-    summary = models.CharField(verbose_name='Краткое описание', max_length=128)
+    summary = models.CharField('Краткое описание', max_length=128)
 
-    description = models.TextField(verbose_name='Описание')
-    comment = models.TextField(verbose_name='Комментарий', null=True, blank=True)
+    description = models.TextField('Описание')
+    comment = models.TextField('Комментарий', null=True, blank=True)
 
-    date_of_issue = models.DateTimeField(verbose_name='Дата назначения', auto_now_add=True)
-    dead_line = models.DateTimeField(verbose_name='Срок исполнения', null=True, blank=True)
+    date_of_issue = models.DateTimeField('Дата назначения', auto_now_add=True)
+    dead_line = models.DateTimeField('Срок исполнения', null=True, blank=True)
 
-    done = models.BooleanField(verbose_name='Выполнено', default=False)
-    archived = models.BooleanField(verbose_name='В архиве', default=False)
+    done = models.BooleanField('Выполнено', default=False)
+    archived = models.BooleanField('В архиве', default=False)
 
-    assigned_by = models.ForeignKey(to='users_app.Profile', verbose_name='Кто назначил', on_delete=models.CASCADE,
+    assigned_by = models.ForeignKey('users_app.Profile', models.CASCADE, verbose_name='Кто назначил',
                                     related_name='tasks_assigned')
-    assigned_to = models.ForeignKey(to='users_app.Profile', verbose_name='Кому назначено', on_delete=models.CASCADE,
+    assigned_to = models.ForeignKey('users_app.Profile', models.CASCADE, verbose_name='Кому назначено',
                                     related_name='tasks_taken')
 
     attachment = models.OneToOneField('common_models_app.Attachment', models.CASCADE, verbose_name='Вложение к заданию',
-                                      null=True, blank=True, related_name='task')
+                                      null=True, blank=True)
 
     class Meta:
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
+        ordering = ('id',)
 
     def __str__(self):
-        return f'{self.summary}, для {self.assigned_to.last_name} {self.assigned_to.first_name}'
+        return f'{self.summary}, для {self.assigned_to.user.last_name} {self.assigned_to.user.first_name}'
