@@ -1,7 +1,5 @@
 """Модели приложения users_app."""
 
-from django.contrib.auth.base_user import AbstractBaseUser
-from django.contrib.auth.models import PermissionsMixin, User
 from django.db import models
 
 
