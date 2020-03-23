@@ -6,7 +6,7 @@ from celery import shared_task
 from django.conf import settings
 from django.core.mail import EmailMessage
 
-from tools.email_messages import greetings_body
+from lib.tools import greetings_body
 
 
 @shared_task

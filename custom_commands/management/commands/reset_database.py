@@ -9,7 +9,7 @@ from django.core.management.base import BaseCommand
 from docker.errors import NotFound
 from docker.models.containers import Container
 
-from lib.functions import split_path
+from lib.tools.functions import split_path
 
 client = docker.from_env()
 
