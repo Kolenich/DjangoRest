@@ -16,6 +16,7 @@ class Profile(models.Model):
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили пользователей'
+        db_table = 'profiles'
         ordering = ('id',)
 
     def __str__(self):

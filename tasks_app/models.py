@@ -30,6 +30,7 @@ class Task(models.Model):
     class Meta:
         verbose_name = 'Задание'
         verbose_name_plural = 'Задания'
+        db_table = 'tasks'
         ordering = ('id',)
 
     def __str__(self):

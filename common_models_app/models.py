@@ -14,6 +14,7 @@ class Attachment(models.Model):
     class Meta:
         verbose_name = 'Вложение'
         verbose_name_plural = 'Вложения'
+        db_table = 'attachments'
 
     def __str__(self):
         return self.file_name
