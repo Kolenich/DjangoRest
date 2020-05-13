@@ -50,4 +50,4 @@ class TaskTableSerializer(TaskSerializer):
         :param instance: объект модели Task
         :return: имя и фамилия назначившего
         """
-        return f'{instance.assigned_by.last_name} {instance.assigned_by.first_name}'
+        return f'{instance.assigned_by.user.last_name} {instance.assigned_by.user.first_name}'

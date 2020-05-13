@@ -6,6 +6,6 @@ from users_app.views import ProfileViewSet
 
 ROUTER = DefaultRouter()
 
-ROUTER.register(r'profile', ProfileViewSet)
+ROUTER.register(r'profiles', ProfileViewSet)
 
 urlpatterns = ROUTER.urls
