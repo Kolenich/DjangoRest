@@ -1,7 +1,5 @@
 FROM python:3.8-slim
 
-LABEL maintainer='nick.zhigalin@gmail.com'
-
 WORKDIR /app
 
 EXPOSE 8000
