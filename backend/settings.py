@@ -23,12 +23,12 @@ config = get_config_from_file(os.path.join(BASE_DIR, 'settings.yml'))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config['SECRET_KEY']
+SECRET_KEY = config.get('SECRET_KEY', 'test')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config['DEBUG']
+DEBUG = config.get('DEBUG', True)
 
-ALLOWED_HOSTS = (*[cut_protocol(x) for x in config['ALLOWED_HOSTS']],)
+ALLOWED_HOSTS = [cut_protocol(x) for x in config.get('ALLOWED_HOSTS', ['*'])]
 
 # Application definition
 
@@ -87,10 +87,10 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        **config['DATABASE'],
-    }
+    'default': config.get('DATABASE', {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }),
 }
 
 # Password validation
@@ -135,7 +135,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Настроки CORS
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = (*config['ALLOWED_HOSTS'],)
+CORS_ORIGIN_WHITELIST = config.get('ALLOWED_HOSTS', [])
+CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 # Настройки SSL
 SECURE_PROXY_SSL_HEADER = ('SCHEME', 'https')
@@ -162,20 +163,19 @@ REST_FRAMEWORK = {
 }
 
 # Настройка Celery
-CELERY_BROKER_URL = f'amqp://{config["CELERY"]["USER"]}:{config["CELERY"]["PASSWORD"]}@diary-rabbitmq:5672/' \
-                    f'{config["CELERY"]["HOST"]}'
+celery_config = config.get('CELERY', {})
+CELERY_BROKER_URL = f'amqp://{celery_config.get("USER")}:{celery_config.get("PASSWORD")}@diary-rabbitmq:5672/' \
+                    f'{celery_config.get("HOST")}' \
+    if celery_config else 'sqla+sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
 CELERY_TIMEZONE = TIME_ZONE
 
 # Настройка почты для рассылки
+email_config = config.get('EMAIL', {})
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = config["EMAIL"]["USER"]
-EMAIL_HOST_PASSWORD = config["EMAIL"]["PASSWORD"]
+EMAIL_HOST_USER = email_config.get('USER', 'test')
+EMAIL_HOST_PASSWORD = email_config.get('PASSWORD', 'test')
 EMAIL_USE_SSL = True
 
 # Настройка заголовков для отправки по электронной почте
 TASK_ASSIGNED_SUBJECT = 'Вам назначено задание'
-
-# Настройки для dev-режима
-if os.getenv('PROJECT_MODE') != 'production':
-    from .settings_dev import *
