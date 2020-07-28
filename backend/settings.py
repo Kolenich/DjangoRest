@@ -28,7 +28,7 @@ SECRET_KEY = config.get('SECRET_KEY', 'test')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config.get('DEBUG', True)
 
-ALLOWED_HOSTS = [cut_protocol(x) for x in config.get('ALLOWED_HOSTS', ['*'])]
+ALLOWED_HOSTS = tuple(cut_protocol(x) for x in config.get('ALLOWED_HOSTS', tuple('*')))
 
 # Application definition
 
