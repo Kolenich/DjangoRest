@@ -22,18 +22,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProfileTaskDetailSerializer(ProfileSerializer):
     """Сериалайзер модели Profile для отображения в подробностях задания."""
 
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_first_name(instance: Profile):
-        """Метод для получения имени пользователя."""
-        return instance.user.first_name
-
-    @staticmethod
-    def get_last_name(instance: Profile):
-        """Метод для получения фамилии пользователя."""
-        return instance.user.last_name
+    first_name = serializers.SlugRelatedField(source='user', slug_field='first_name', read_only=True)
+    last_name = serializers.SlugRelatedField(source='user', slug_field='last_name', read_only=True)
 
     class Meta(ProfileMeta):
         fields = ('first_name', 'last_name')
@@ -42,24 +32,9 @@ class ProfileTaskDetailSerializer(ProfileSerializer):
 class ProfileDetailSerializer(ProfileSerializer):
     """Сериалайзер модели Profile для отображения в угловом меню."""
 
-    first_name = serializers.SerializerMethodField()
-    last_name = serializers.SerializerMethodField()
-    email = serializers.SerializerMethodField()
-
-    @staticmethod
-    def get_first_name(instance: Profile):
-        """Метод для получения имени пользователя."""
-        return instance.user.first_name
-
-    @staticmethod
-    def get_last_name(instance: Profile):
-        """Метод для получения фамилии пользователя."""
-        return instance.user.last_name
-
-    @staticmethod
-    def get_email(instance: Profile):
-        """Метод для получения фамилии пользователя."""
-        return instance.user.email
+    first_name = serializers.SlugRelatedField(source='user', slug_field='first_name', read_only=True)
+    last_name = serializers.SlugRelatedField(source='user', slug_field='last_name', read_only=True)
+    email = serializers.SlugRelatedField(source='user', slug_field='email', read_only=True)
 
     class Meta(ProfileMeta):
         fields = ('first_name', 'last_name', 'email')
@@ -68,22 +43,12 @@ class ProfileDetailSerializer(ProfileSerializer):
 class ProfileAssignmentSerializer(ProfileSerializer):
     """Представление модели User для фльтрации в таблице задач."""
 
-    value = serializers.SerializerMethodField(method_name='select_value')
+    value = serializers.SlugRelatedField(source='user', slug_field='pk', read_only=True)
     label = serializers.SerializerMethodField(method_name='select_label')
-    key = serializers.SerializerMethodField(method_name='select_key')
+    key = serializers.SlugRelatedField(source='user', slug_field='pk', read_only=True)
 
     class Meta(ProfileMeta):
         fields = ('key', 'value', 'label')
-
-    @staticmethod
-    def select_value(instance: Profile) -> int:
-        """
-        Метод для получения значения для селекта фильтрации в таблице задач.
-
-        :param instance: объект модели User
-        :return: первичный ключ модели
-        """
-        return instance.user.pk
 
     @staticmethod
     def select_label(instance: Profile) -> str:
@@ -94,13 +59,3 @@ class ProfileAssignmentSerializer(ProfileSerializer):
         :return: имя и фамилия пользователя
         """
         return f'{instance.user.last_name} {instance.user.first_name}'
-
-    @staticmethod
-    def select_key(instance: Profile) -> int:
-        """
-         Метод для получения ключа для селекта фильтрации в таблице задач.
-
-        :param instance: объект модели User
-        :return: первичный ключ модели
-        """
-        return instance.user.pk

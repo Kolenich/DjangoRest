@@ -7,40 +7,34 @@ from tasks_app.models import Task
 from users_app.serializers import ProfileTaskDetailSerializer
 
 
-class TaskMeta:
-    """Базовый мета-класс для сериалайзеров модели Task."""
-
-    model = Task
-    fields = '__all__'
-
-
 class TaskSerializer(serializers.ModelSerializer):
-    """Базовый сериалайзер для модели Task."""
+    """Основной сериалайзер для модели Task."""
 
-    class Meta(TaskMeta):
-        pass
+    class Meta:
+        model = Task
+        fields = '__all__'
 
 
-class TaskDetailSerializer(TaskSerializer):
+class TaskDetailSerializer(serializers.ModelSerializer):
     """Сериалайзер модели Task для отображения деталей задания."""
 
-    assigned_by = ProfileTaskDetailSerializer(many=False, read_only=True)
-    attachment = AttachmentSerializer(many=False, read_only=True)
+    assigned_by = ProfileTaskDetailSerializer(read_only=True)
+    attachment = AttachmentSerializer(read_only=True)
 
-    class Meta(TaskMeta):
-        fields = None
-        exclude = ['assigned_to']
+    class Meta:
+        model = Task
+        exclude = ('assigned_to',)
 
 
-class TaskTableSerializer(TaskSerializer):
+class TaskTableSerializer(serializers.ModelSerializer):
     """Табличное представление для модели Task."""
 
     assigned_by = serializers.SerializerMethodField()
-    attachment = AttachmentSerializer(many=False, read_only=True)
+    attachment = AttachmentSerializer(read_only=True)
 
-    class Meta(TaskMeta):
-        fields = None
-        exclude = ['done']
+    class Meta:
+        model = Task
+        exclude = ('done',)
 
     @staticmethod
     def get_assigned_by(instance: Task) -> str:
