@@ -4,7 +4,7 @@ WORKDIR /app
 
 EXPOSE 8000
 
-RUN pip install --upgrade pip setuptools \
+RUN pip install -U pip -U setuptools \
  && pip install gunicorn
 
 COPY requirements.txt /app/
