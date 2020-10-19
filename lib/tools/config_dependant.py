@@ -2,6 +2,7 @@
 
 import os
 
+from django.conf import settings
 from yaml import safe_load
 
 
@@ -32,3 +33,16 @@ def get_config_from_file(file: str):
         return config
     else:
         raise FileNotFoundError('Configuration file not found')
+
+
+def get_celery_config(celery_config):
+    """
+    Функция получения настройки подключения к CELERY.
+
+    :param celery_config: объект настроек CELERY
+    :return: настройка подключения к CELERY
+    """
+    if celery_config:
+        return f'amqp://{celery_config.get("USER")}:{celery_config.get("PASSWORD")}@diary-rabbitmq:5672/' \
+               f'{celery_config.get("HOST")}'
+    return f'sqla+sqlite:///{os.path.join(settings.BASE_DIR, "db.sqlite3")}'

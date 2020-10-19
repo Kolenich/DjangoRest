@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from lib.tools import cut_protocol, get_config_from_file
+from lib.tools import cut_protocol, get_celery_config, get_config_from_file
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -164,9 +164,7 @@ REST_FRAMEWORK = {
 
 # Настройка Celery
 celery_config = config.get('CELERY', {})
-CELERY_BROKER_URL = f'amqp://{celery_config.get("USER")}:{celery_config.get("PASSWORD")}@diary-rabbitmq:5672/' \
-                    f'{celery_config.get("HOST")}' \
-    if celery_config else 'sqla+sqlite:///' + os.path.join(BASE_DIR, 'db.sqlite3')
+CELERY_BROKER_URL = get_celery_config(celery_config)
 CELERY_TIMEZONE = TIME_ZONE
 
 # Настройка почты для рассылки
