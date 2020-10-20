@@ -44,9 +44,9 @@ INSTALLED_APPS = (
     'rest_auth',
     'corsheaders',
     'django_filters',
-    'users_app',
-    'tasks_app',
-    'common_models_app',
+    'users',
+    'tasks',
+    'common_models',
     'custom_commands'
 )
 
@@ -67,7 +67,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': (
-            os.path.join(BASE_DIR, 'tasks_app', 'templates'),
+            os.path.join(BASE_DIR, 'tasks', 'templates'),
         ),
         'APP_DIRS': True,
         'OPTIONS': {

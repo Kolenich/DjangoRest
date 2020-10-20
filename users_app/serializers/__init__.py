@@ -1,1 +1,0 @@
-from .user import ProfileAssignmentSerializer, ProfileDetailSerializer, ProfileSerializer, ProfileTaskDetailSerializer

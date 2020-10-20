@@ -21,9 +21,9 @@ from django.urls import include, path
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('rest-auth/', include('rest_auth.urls')),
-    path('users-api/', include('users_app.urls')),
-    path('tasks-api/', include('tasks_app.urls')),
-    path('common-models-api/', include('common_models_app.urls')),
+    path('users/', include('users.urls')),
+    path('tasks/', include('tasks.urls')),
+    path('common-models/', include('common_models.urls')),
 ]
 
 if settings.DEBUG:
