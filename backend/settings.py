@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_auth',
     'corsheaders',
     'django_filters',
+    'background_task',
     'users',
     'tasks',
     'common_models',

@@ -32,7 +32,7 @@ class TaskDashboardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # Возвращаем только те задания, которые назначены на пользователя
-        return Task.objects.filter(assigned_to=self.request.user, archived=False)
+        return Task.objects.filter(assigned_to=self.request.user.pk, archived=False)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -45,7 +45,7 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # Возвращаем только те задания, к которым пользователь имеет отношение
-        user_criteria = Q(assigned_to=self.request.user) | Q(assigned_by=self.request.user)
+        user_criteria = Q(assigned_to=self.request.user.pk) | Q(assigned_by=self.request.user.pk)
         return Task.objects.filter(user_criteria, archived=False)
 
     def retrieve(self, request, *args, **kwargs):
