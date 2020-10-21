@@ -16,6 +16,5 @@ COPY . /app
 ENTRYPOINT mkdir -p pids logs \
         && python manage.py migrate \
         && python manage.py collectstatic --noinput \
-        && celery multi start worker -A backend --pidfile="pids/celery.pid" --logfile="logs/celery.log" \
         && python manage.py process_tasks \
         && gunicorn backend.wsgi -b 0.0.0.0 --access-logfile - --log-file -
