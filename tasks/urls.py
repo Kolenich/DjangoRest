@@ -2,7 +2,7 @@
 
 from rest_framework.routers import DefaultRouter
 
-from tasks.views import TaskViewSet, TaskDashboardViewSet
+from tasks.views import TaskDashboardViewSet, TaskViewSet
 
 ROUTER = DefaultRouter()
 

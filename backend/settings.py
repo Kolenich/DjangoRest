@@ -14,7 +14,7 @@ import json
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from tools.functions import str_to_bool
+from backend.tools import str_to_bool
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 

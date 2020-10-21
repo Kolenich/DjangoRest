@@ -5,8 +5,8 @@ from django.db.models.signals import post_delete
 from django.dispatch import receiver
 
 from backend.settings import BASE_DIR
+from backend.tools import delete_empty_dirs
 from common_models.models import Attachment
-from tools.functions import delete_empty_dirs
 
 
 @receiver(post_delete, sender=Attachment)

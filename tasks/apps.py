@@ -13,5 +13,3 @@ class TasksAppConfig(AppConfig):
         """Функция, выполняемая после запуска приложения. Делает импорт сигналов для моделей."""
         # noinspection PyUnresolvedReferences
         from tasks import signals  # noqa F401
-        # noinspection PyUnresolvedReferences
-        import custom_lookups

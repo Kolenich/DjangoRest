@@ -9,7 +9,7 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FO
 
 from common_models.models import Attachment
 from tasks.models import Task
-from tasks.serializers import TaskDetailSerializer, TaskSerializer, TaskDashboardSerializer
+from tasks.serializers import TaskDashboardSerializer, TaskDetailSerializer, TaskSerializer
 
 
 class TaskDashboardViewSet(viewsets.ModelViewSet):

@@ -1,5 +1,5 @@
 """Дополнительные инструменты для приложения tasks."""
-from background_task import background, models
+from background_task import background
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives
 from django.utils.html import strip_tags
