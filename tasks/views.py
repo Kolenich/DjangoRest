@@ -10,7 +10,6 @@ from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_403_FO
 from common_models.models import Attachment
 from tasks.models import Task
 from tasks.serializers import TaskDetailSerializer, TaskSerializer, TaskDashboardSerializer
-from tasks.tasks import task_assigned_notification
 
 
 class TaskDashboardViewSet(viewsets.ModelViewSet):
@@ -55,8 +54,8 @@ class TaskViewSet(viewsets.ModelViewSet):
         # Возвращаем только те задания, к которым пользователь имеет отношение
         if task.assigned_to != self.request.user and task.assigned_by != self.request.user:
             return Response({'detail': 'Вы не имеете доступ к этому заданию'}, HTTP_403_FORBIDDEN)
+
         serializer = self.get_serializer(task)
-        print(serializer.data)
         return Response(serializer.data, HTTP_200_OK)
 
     @action(methods=['post'], detail=True, url_path='attach-file')
@@ -77,18 +76,6 @@ class TaskViewSet(viewsets.ModelViewSet):
             }
             task.attachment = Attachment.objects.create(**attachment)
             task.save()
-
-            # Если пользователь при регистрации поставил галочку "Рассылка на почту", то отправляем письмо
-            if task.assigned_to.profile.mailing:
-                task_object = {
-                    'summary': task.summary,
-                    'description': task.description,
-                    'dead_line': task.dead_line.strftime('%d.%m.%Y'),
-                    'comment': task.comment,
-                }
-                assigned_by = f'{request.user.last_name} {request.user.first_name}'
-
-                task_assigned_notification.delay(task.assigned_to.user.email, task_object, assigned_by)
 
             data = self.get_serializer(task).data
             status = HTTP_200_OK

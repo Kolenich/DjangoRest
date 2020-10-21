@@ -10,29 +10,28 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
+import json
 import os
 
-from lib.tools import cut_protocol, get_celery_config, get_config_from_file
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+from tools.functions import str_to_bool
 
-config = get_config_from_file(os.path.join(BASE_DIR, 'settings.yml'))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config.get('SECRET_KEY', 'test')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'test')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config.get('DEBUG', True)
+DEBUG = str_to_bool(os.environ.get('DEBUG', 'true'))
 
-ALLOWED_HOSTS = tuple(cut_protocol(x) for x in config.get('ALLOWED_HOSTS', tuple('*')))
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
-INSTALLED_APPS = (
+INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -47,10 +46,8 @@ INSTALLED_APPS = (
     'users',
     'tasks',
     'common_models',
-    'custom_commands'
-)
-
-MIDDLEWARE = (
+]
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
@@ -59,24 +56,24 @@ MIDDLEWARE = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-)
+]
 
 ROOT_URLCONF = 'backend.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': (
+        'DIRS': [
             os.path.join(BASE_DIR, 'tasks', 'templates'),
-        ),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
-            'context_processors': (
+            'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-            ),
+            ],
         },
     },
 ]
@@ -87,16 +84,23 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-    'default': config.get('DATABASE', {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ.get('DB_NAME', 'postgres'),
+        'USER': os.environ.get('DB_USER', 'test'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': 5432
+    } if not DEBUG else {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }),
+    },
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
 
-AUTH_PASSWORD_VALIDATORS = (
+AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'
     },
@@ -109,7 +113,7 @@ AUTH_PASSWORD_VALIDATORS = (
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'
     },
-)
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -135,7 +139,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Настроки CORS
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_WHITELIST = config.get('ALLOWED_HOSTS', [])
+CORS_ORIGIN_WHITELIST = []
 CORS_ORIGIN_ALLOW_ALL = DEBUG
 
 # Настройки SSL
@@ -145,7 +149,7 @@ FILE_UPLOAD_PERMISSIONS = 0o644
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100,
+    'PAGE_SIZE': 50,
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.AdminRenderer',
@@ -162,18 +166,9 @@ REST_FRAMEWORK = {
     ),
 }
 
-# Настройка Celery
-celery_config = config.get('CELERY', {})
-CELERY_BROKER_URL = get_celery_config(celery_config)
-CELERY_TIMEZONE = TIME_ZONE
-
 # Настройка почты для рассылки
-email_config = config.get('EMAIL', {})
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = email_config.get('USER', 'test')
-EMAIL_HOST_PASSWORD = email_config.get('PASSWORD', 'test')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'test')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '123456')
 EMAIL_USE_SSL = True
-
-# Настройка заголовков для отправки по электронной почте
-TASK_ASSIGNED_SUBJECT = 'Вам назначено задание'

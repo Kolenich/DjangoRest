@@ -2,12 +2,10 @@
 
 from django.contrib.auth.models import User
 from django.db import transaction
-from django.db.models import ObjectDoesNotExist
 from django.db.utils import IntegrityError
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
@@ -23,7 +21,7 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(methods=['post'], detail=False, permission_classes=[AllowAny])
     @transaction.atomic
-    def registrate(self, request: Request) -> Response:
+    def registrate(self, request):
         """
         Экшн для регистрации новых пользователей.
 
@@ -32,18 +30,18 @@ class UserViewSet(viewsets.ModelViewSet):
         """
         data = {'detail': 'Неверные данные'}
 
-        profile_data = {
-            'mailing': request.data.pop('mailing', False),
-            'middle_name': request.data.pop('middle_name', None)
-        }
-
         user_data = {
             'first_name': request.data.pop('first_name', None),
             'last_name': request.data.pop('last_name', None),
             'password': request.data.pop('password', None),
             'email': request.data.pop('email', None),
             'username': request.data.pop('username', None),
-            'profile': Profile.objects.create(**profile_data),
+        }
+
+        profile_data = {
+            'mailing': request.data.pop('mailing', False),
+            'middle_name': request.data.pop('middle_name', None),
+            'user': User.objects.create_user(**user_data)
         }
 
         try:
@@ -65,7 +63,7 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(data, HTTP_400_BAD_REQUEST)
 
         try:
-            User.objects.create_user(**user_data)
+            Profile.objects.create(**profile_data)
             data['detail'] = 'Пользователь создан успешно'
             response = Response(data, HTTP_201_CREATED)
         except IntegrityError:
@@ -80,24 +78,22 @@ class UserViewSet(viewsets.ModelViewSet):
         return response
 
     @action(methods=['get'], detail=False, url_path='detail')
-    def profile_detail(self, request: Request):
+    def profile_detail(self, request):
         """
         Метод для получения данных о конкретном юзере.
 
         :param request: объект запроса
         :return: объект ответа с данными о юзере
         """
-        try:
-            instance = self.get_queryset().get(pk=request.user.pk)
-            serializer = UserDetailSerializer(instance, context=self.get_serializer_context())
-            return Response(serializer.data, HTTP_200_OK)
-        except ObjectDoesNotExist:
-            data = {'detail': 'Указанный пользователь не найден'}
-
+        if request.user.is_anonymous:
+            data = {'detail': 'Вам необходимо зарегистрироваться в системе'}
             return Response(data, HTTP_404_NOT_FOUND)
 
+        serializer = UserDetailSerializer(request.user, context=self.get_serializer_context())
+        return Response(serializer.data, HTTP_200_OK)
+
     @action(methods=['get'], detail=False)
-    def assigner(self, request: Request):
+    def assigner(self, request):
         """
         Метод выдачи пользователей для фильтрации по заказчику.
         Ислючает из списка пользователя, сделавшего запрос.
@@ -109,6 +105,6 @@ class UserViewSet(viewsets.ModelViewSet):
             .filter(is_superuser=False, is_staff=False, is_active=True) \
             .exclude(pk=request.user.pk)
 
-        serializer = UserAssignmentSerializer(queryset, many=True)
+        serializer = UserAssignmentSerializer(queryset, many=True, context=self.get_serializer_context())
 
         return Response(serializer.data, HTTP_200_OK)

@@ -12,6 +12,6 @@ class UsersApp(AppConfig):
     def ready(self):
         """Функция, выполняемая после запуска приложения. Делает импорт сигналов для моделей."""
         # noinspection PyUnresolvedReferences
-        from lib import custom_lookups  # noqa F401
+        import custom_lookups
         # noinspection PyUnresolvedReferences
         from users import signals  # noqa F401

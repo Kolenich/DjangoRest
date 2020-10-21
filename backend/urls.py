@@ -20,10 +20,9 @@ from django.urls import include, path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('rest-auth/', include('rest_auth.urls')),
+    path('auth/', include('rest_auth.urls')),
     path('users/', include('users.urls')),
     path('tasks/', include('tasks.urls')),
-    path('common-models/', include('common_models.urls')),
 ]
 
 if settings.DEBUG:

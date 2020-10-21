@@ -14,4 +14,4 @@ class TasksAppConfig(AppConfig):
         # noinspection PyUnresolvedReferences
         from tasks import signals  # noqa F401
         # noinspection PyUnresolvedReferences
-        from lib import custom_lookups  # noqa F401
+        import custom_lookups
