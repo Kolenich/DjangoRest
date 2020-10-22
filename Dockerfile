@@ -16,5 +16,5 @@ COPY . /app
 ENTRYPOINT mkdir -p pids logs \
         && python manage.py migrate \
         && python manage.py collectstatic --noinput \
-        && python manage.py process_tasks \
-        && gunicorn backend.wsgi -b 0.0.0.0 --access-logfile - --log-file -
+        && gunicorn backend.wsgi -b 0.0.0.0 --access-logfile - --log-file - -D \
+        && python manage.py process_tasks
