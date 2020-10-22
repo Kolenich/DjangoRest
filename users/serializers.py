@@ -31,28 +31,6 @@ class UserDetailSerializer(serializers.ModelSerializer):
 class UserAssignmentSerializer(serializers.ModelSerializer):
     """Представление модели User для фльтрации в таблице задач."""
 
-    value = serializers.SerializerMethodField(method_name='user_value')
-    label = serializers.SerializerMethodField()
-    key = serializers.SerializerMethodField()
-
     class Meta:
         model = User
-        fields = ('value', 'label', 'key')
-
-    @staticmethod
-    def get_label(instance):
-        """
-        Метод для получения ярлыка для селекта фильтрации в таблице задач.
-
-        :param instance: объект модели User
-        :return: имя и фамилия пользователя
-        """
-        return f'{instance.last_name} {instance.first_name}'
-
-    @staticmethod
-    def get_key(instance):
-        return instance.pk
-
-    @staticmethod
-    def user_value(instance):
-        return instance.pk
+        fields = ('pk', 'last_name', 'first_name')

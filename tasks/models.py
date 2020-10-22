@@ -14,7 +14,7 @@ class Task(models.Model):
     comment = models.TextField('Комментарий', null=True, blank=True)
 
     date_of_issue = models.DateTimeField('Дата назначения', auto_now_add=True)
-    dead_line = models.DateTimeField('Срок исполнения', null=True, blank=True)
+    dead_line = models.DateTimeField('Срок исполнения')
 
     done = models.BooleanField('Выполнено', default=False)
     archived = models.BooleanField('В архиве', default=False)
