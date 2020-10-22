@@ -3,13 +3,25 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from users.models import Profile
+
+
+class ProfileSerializer(serializers.ModelSerializer):
+    """Сериалайзер профиля."""
+
+    class Meta:
+        model = Profile
+        exclude = ('user',)
+
 
 class UserSerializer(serializers.ModelSerializer):
-    """Сериалайзер модели Profile."""
+    """Сериалайзер модели User."""
+
+    profile = ProfileSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = '__all__'
+        exclude = ('password',)
 
 
 class UserTaskDetailSerializer(serializers.ModelSerializer):

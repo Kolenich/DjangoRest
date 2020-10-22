@@ -18,16 +18,12 @@ class UserViewSet(viewsets.ModelViewSet):
 
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    unauthorized = {'detail': 'Вам необходимо зарегистрироваться в системе'}
 
     @action(methods=['post'], detail=False, permission_classes=[AllowAny])
     @transaction.atomic
     def registrate(self, request):
-        """
-        Экшн для регистрации новых пользователей.
-
-        :param request: объект запроса
-        :return: 201 или 400
-        """
+        """Экшн для регистрации новых пользователей."""
         data = {'detail': 'Неверные данные'}
 
         user_data = {
@@ -79,15 +75,9 @@ class UserViewSet(viewsets.ModelViewSet):
 
     @action(methods=['get'], detail=False, url_path='detail')
     def profile_detail(self, request):
-        """
-        Метод для получения данных о конкретном юзере.
-
-        :param request: объект запроса
-        :return: объект ответа с данными о юзере
-        """
+        """Метод для получения данных о конкретном юзере."""
         if request.user.is_anonymous:
-            data = {'detail': 'Вам необходимо зарегистрироваться в системе'}
-            return Response(data, HTTP_404_NOT_FOUND)
+            return Response(self.unauthorized, HTTP_404_NOT_FOUND)
 
         serializer = UserDetailSerializer(request.user, context=self.get_serializer_context())
         return Response(serializer.data, HTTP_200_OK)
@@ -107,4 +97,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
         serializer = UserAssignmentSerializer(queryset, many=True, context=self.get_serializer_context())
 
+        return Response(serializer.data, HTTP_200_OK)
+
+    @action(methods=['get'], detail=False, url_path='current-user')
+    def current_user(self, request, *args, **kwargs):
+        """Экшн получения информации о текущем пользователе."""
+        user = request.user
+        if user.is_anonymous:
+            return Response(self.unauthorized, HTTP_400_BAD_REQUEST)
+
+        serializer = self.get_serializer(user)
         return Response(serializer.data, HTTP_200_OK)
