@@ -5,6 +5,7 @@ from rest_framework import serializers
 from common_models.serializers import AttachmentSerializer
 from tasks.models import Task
 from users.serializers import UserTaskDetailSerializer
+from tasks.tools import send_email
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -20,6 +21,14 @@ class TaskSerializer(serializers.ModelSerializer):
         request = self.context['request']
         validated_data['assigned_by'] = request.user
         instance = self.Meta.model.objects.create(**validated_data)
+        if instance.assigned_to.profile.mailing:
+            send_email(
+                f'Пользователь {request.user.username} назначил Вам задание',
+                instance.email_template,
+                [instance.assigned_to.email],
+                verbose_name='Отправка почты',
+                creator=request.user
+            )
         return instance
 
 

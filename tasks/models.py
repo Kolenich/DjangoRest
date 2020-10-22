@@ -1,6 +1,7 @@
 """Модели приложения TasksApp."""
 
 from django.db import models
+from django.template.loader import render_to_string
 
 
 # Create your models here.
@@ -26,6 +27,22 @@ class Task(models.Model):
 
     attachment = models.OneToOneField('common_models.Attachment', models.CASCADE, verbose_name='Вложение к заданию',
                                       null=True, blank=True)
+
+    @property
+    def email_template(self):
+        """
+        Метод получения шаблона для отправки уведомления на почту.
+
+        :return: строка шаблона
+        """
+        context = {
+            'summary': self.summary,
+            'description': self.description,
+            'comment': self.comment,
+            'date_of_issue': self.date_of_issue,
+            'dead_line': self.dead_line,
+        }
+        return render_to_string('email_notification.html', context)
 
     class Meta:
         verbose_name = 'Задание'

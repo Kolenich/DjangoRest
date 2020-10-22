@@ -169,7 +169,7 @@ REST_FRAMEWORK = {
 
 # Настройка почты для рассылки
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 465
+EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'test')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '123456')
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
