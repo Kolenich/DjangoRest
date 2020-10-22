@@ -21,7 +21,8 @@ class TaskDashboardViewSet(viewsets.ModelViewSet):
         'comment': ('icontains', 'istartswith', 'iendswith', 'exact', 'ne'),
         'date_of_issue': ('gte', 'gt', 'lte', 'lt', 'ne'),
         'dead_line': ('gte', 'gt', 'lte', 'lt', 'ne'),
-        'done': ('exact', 'ne'),
+        'done': ('exact',),
+        'archived': ('exact',),
         'assigned_by_id': ('exact',),
         'assigned_to_id': ('exact',),
     }
@@ -32,7 +33,7 @@ class TaskDashboardViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         # Возвращаем только те задания, которые назначены на пользователя
-        return Task.objects.filter(assigned_to=self.request.user.pk, archived=False)
+        return Task.objects.filter(assigned_to=self.request.user.pk)
 
 
 class TaskViewSet(viewsets.ModelViewSet):
@@ -50,7 +51,6 @@ class TaskViewSet(viewsets.ModelViewSet):
 
     def retrieve(self, request, *args, **kwargs):
         task = self.get_object()
-        user_criteria = Q(assigned_to=self.request.user) | Q(assigned_by=self.request.user)
         # Возвращаем только те задания, к которым пользователь имеет отношение
         if task.assigned_to != self.request.user and task.assigned_by != self.request.user:
             return Response({'detail': 'Вы не имеете доступ к этому заданию'}, HTTP_403_FORBIDDEN)
