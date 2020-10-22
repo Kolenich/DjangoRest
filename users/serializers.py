@@ -3,11 +3,14 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
 
+from common_models.serializers import AttachmentSerializer
 from users.models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     """Сериалайзер профиля."""
+
+    avatar = AttachmentSerializer(read_only=True)
 
     class Meta:
         model = Profile
@@ -34,10 +37,11 @@ class UserTaskDetailSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
     """Сериалайзер модели Profile для отображения в угловом меню."""
+    profile = ProfileSerializer(read_only=True)
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email', 'username', 'profile')
 
 
 class UserAssignmentSerializer(serializers.ModelSerializer):
