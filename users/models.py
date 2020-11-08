@@ -13,10 +13,17 @@ class Profile(models.Model):
     phone = models.CharField('Телефон', max_length=32, blank=True, null=True)
     mailing = models.BooleanField('Рассылка на почту', default=False, blank=True)
 
+    @property
+    def full_name(self):
+        """Свойство получения полного имени."""
+        if self.middle_name:
+            return f'{self.user.last_name} {self.user.first_name} {self.middle_name}'
+        return f'{self.user.last_name} {self.user.first_name}'
+
     class Meta:
         verbose_name = 'Профиль пользователя'
         verbose_name_plural = 'Профили пользователей'
         db_table = 'profiles'
 
     def __str__(self):
-        return f'{self.user.last_name} {self.user.first_name}'
+        return f'Профиль {self.user.username}'
