@@ -1,11 +1,10 @@
-FROM python:3.8-slim
+FROM python:3-slim-stretch
 
 WORKDIR /app
 
 EXPOSE 8000
 
-RUN pip install -U pip -U setuptools \
- && pip install gunicorn
+RUN pip install -U pip -U setuptools gunicorn supervisor
 
 COPY requirements.txt /app/
 
@@ -16,5 +15,4 @@ COPY . /app
 ENTRYPOINT mkdir -p pids logs \
         && python manage.py migrate \
         && python manage.py collectstatic --noinput \
-        && gunicorn backend.wsgi -b 0.0.0.0 --access-logfile - --log-file - -D \
-        && python manage.py process_tasks
+        && supervisord -c supervisord.ini
