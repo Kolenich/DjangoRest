@@ -1,5 +1,6 @@
 asgiref
 channels
+channels_redis
 Django==3.2.5
 django-background-tasks
 django-cors-headers
