@@ -4,7 +4,7 @@ WORKDIR /app
 
 EXPOSE 8000
 
-RUN pip install -U pip -U setuptools gunicorn uvicorn supervisor
+RUN pip install -U pip -U setuptools supervisor
 
 COPY requirements.txt /app/
 
