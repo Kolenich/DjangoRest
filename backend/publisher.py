@@ -2,7 +2,7 @@
 import json
 
 from asgiref.sync import async_to_sync
-from channels.layers import get_channel_layer
+from channels.layers import DEFAULT_CHANNEL_LAYER, get_channel_layer
 from django.core.serializers.json import DjangoJSONEncoder
 
 
@@ -13,7 +13,7 @@ class Publisher:
         self.group = group
         self.layer = get_channel_layer()
 
-    def publish(self, type_='default', message=None):
+    def publish(self, message=None, type_=DEFAULT_CHANNEL_LAYER):
         """Метод для непосредственной отправки сообщения по вебсокету."""
         if message is None:
             message = {}
