@@ -9,4 +9,5 @@ from users.models import Profile
 @receiver(post_delete, sender=Profile)
 def delete_avatar(sender, instance: Profile, **kwargs):
     """Удаляет аватар."""
-    instance.avatar.delete()
+    if instance.avatar:
+        instance.avatar.delete()

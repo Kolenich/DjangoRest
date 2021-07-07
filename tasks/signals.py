@@ -9,4 +9,5 @@ from tasks.models import Task
 @receiver(post_delete, sender=Task)
 def delete_attachment(sender, instance: Task, **kwargs):
     """Удаляет вложение."""
-    instance.attachment.delete()
+    if instance.attachment:
+        instance.attachment.delete()

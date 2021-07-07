@@ -4,8 +4,8 @@ from rest_framework import serializers
 
 from common_models.serializers import AttachmentSerializer
 from tasks.models import Task
-from users.serializers import UserTaskDetailSerializer
 from tasks.tools import send_email
+from users.serializers import UserTaskDetailSerializer
 
 
 class TaskSerializer(serializers.ModelSerializer):
@@ -29,6 +29,7 @@ class TaskSerializer(serializers.ModelSerializer):
                 verbose_name='Отправка почты',
                 creator=request.user
             )
+        instance.to_websocket()
         return instance
 
 
