@@ -2,7 +2,7 @@
 
 from django.urls import path
 
-from backend.consumers import TaskConsumer
+from websockets.consumers import TaskConsumer
 
 urlpatterns = [
     path('ws/tasks/', TaskConsumer.as_asgi()),

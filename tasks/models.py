@@ -29,7 +29,7 @@ class Task(models.Model):
                                       null=True, blank=True)
 
     def to_websocket(self):
-        from backend.publisher import Publisher
+        from websockets.publisher import Publisher
         from tasks.serializers import TaskDashboardSerializer
 
         Publisher(f'tasks_{self.assigned_to.username}').publish(message=TaskDashboardSerializer(self).data)
