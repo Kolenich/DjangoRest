@@ -13,10 +13,10 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import json
 import os
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-from backend.tools import str_to_bool
+from pathlib import Path
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -25,7 +25,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY', 'test')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = str_to_bool(os.environ.get('DEBUG', 'true'))
+DEBUG = os.environ.get('DEBUG', 'true') == 'true'
 
 ALLOWED_HOSTS = ['*']
 
@@ -96,7 +96,7 @@ DATABASES = {
         'PORT': 5432
     } if not DEBUG else {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': BASE_DIR / 'db.sqlite3',
     },
 }
 
@@ -135,10 +135,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = BASE_DIR / 'static'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Настроки CORS
 CORS_ALLOW_CREDENTIALS = True
@@ -184,7 +184,7 @@ CHANNEL_LAYERS = {
     } if DEBUG else {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [(os.environ.get('REDIS_HOST', 'redis'), 6379)],
+            'hosts': [(os.environ.get('REDIS_HOST', 'redis'), 6379)],
         }
     }
 }

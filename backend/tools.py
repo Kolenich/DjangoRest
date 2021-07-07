@@ -24,17 +24,3 @@ def delete_empty_dirs(path: str):
     # Саму папку media не удаляем
     if not len(os.listdir(path)) and path[-5:] != 'media':
         os.rmdir(path)
-
-
-def str_to_bool(value):
-    """
-    Функция конвертации строки в булевскую переменную
-
-    :param value строка для конвертации
-    :return булевское значение
-    """
-    if value.lower() == 'true':
-        return True
-    if value.lower() == 'false':
-        return False
-    return bool(value)
