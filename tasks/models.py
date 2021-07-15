@@ -1,11 +1,13 @@
 """Модели приложения TasksApp."""
 
+from django.contrib.admin import site
 from django.db import models
 from django.template.loader import render_to_string
 
 
 # Create your models here.
 
+@site.register
 class Task(models.Model):
     """Модель задания."""
 

@@ -1,8 +1,10 @@
 """Модели приложения users."""
 
+from django.contrib.admin import site
 from django.db import models
 
 
+@site.register
 class Profile(models.Model):
     """Модель Профиля пользователя."""
 
