@@ -93,7 +93,7 @@ DATABASES = {
         'USER': os.environ.get('DB_USER', 'test'),
         'PASSWORD': os.environ.get('DB_PASSWORD', '123456'),
         'HOST': os.environ.get('DB_HOST', 'localhost'),
-        'PORT': 5432
+        'PORT': os.environ.get('DB_PORT', '5432')
     } if not DEBUG else {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -120,23 +120,16 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
-
 LANGUAGE_CODE = 'ru'
-
 TIME_ZONE = 'Europe/Moscow'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
@@ -184,7 +177,9 @@ CHANNEL_LAYERS = {
     } if DEBUG else {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [(os.environ.get('REDIS_HOST', 'redis'), 6379)],
+            'hosts': [
+                (os.environ.get('REDIS_HOST', 'redis'), os.environ.get('REDIS_PORT', '6379'))
+            ],
         }
     }
 }
