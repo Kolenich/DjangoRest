@@ -1,10 +1,8 @@
 """Модели приложения CommonModelsApp."""
 
-from django.contrib.admin import site
 from django.db import models
 
 
-@site.register
 class Attachment(models.Model):
     """Модель вложения."""
 
