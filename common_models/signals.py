@@ -1,4 +1,4 @@
-"""Сигналы для модели Attachment."""
+"""Сигналы для приложения common_models."""
 import os
 
 from django.db.models.signals import post_delete
